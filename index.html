@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rotoscoping | Frame by Frame</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --cream: #f2ede6;
+    --film: #1a1510;
+    --amber: #e8913a;
+    --rust: #c0401e;
+    --silver: #b8b0a4;
+    --dim: #3a342c;
+    --glow: rgba(232, 145, 58, 0.18);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--film);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* ── FILM GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+    mix-blend-mode: overlay;
+  }
+
+  /* ── SPROCKET HOLES ── */
+  .sprocket-strip {
+    position: fixed; top: 0; bottom: 0; width: 28px;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: space-around; z-index: 100;
+    background: #0d0b08;
+    border-right: 1px solid #2a2218;
+  }
+  .sprocket-strip.right { right: 0; border-right: none; border-left: 1px solid #2a2218; }
+  .sprocket-strip.left { left: 0; }
+  .sprocket-hole {
+    width: 14px; height: 10px;
+    border-radius: 2px;
+    background: var(--film);
+    border: 1px solid #2a2218;
+    flex-shrink: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 28px; right: 28px;
+    z-index: 500;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 40px;
+    background: linear-gradient(to bottom, rgba(10,8,5,0.97), transparent);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+    color: var(--amber);
+    text-decoration: none;
+    position: relative;
+  }
+  .nav-logo::after {
+    content: '▶';
+    font-size: 0.5rem;
+    vertical-align: super;
+    margin-left: 4px;
+    color: var(--rust);
+  }
+
+  .nav-links {
+    display: flex; gap: 0; list-style: none;
+  }
+  .nav-links li a {
+    display: block;
+    padding: 8px 18px;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--silver);
+    text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links li a::before {
+    content: '';
+    position: absolute; bottom: 4px; left: 18px; right: 18px; height: 1px;
+    background: var(--amber);
+    transform: scaleX(0);
+    transition: transform 0.25s ease;
+  }
+  .nav-links li a:hover { color: var(--cream); }
+  .nav-links li a:hover::before { transform: scaleX(1); }
+  .nav-links li a.active { color: var(--amber); }
+  .nav-links li a.active::before { transform: scaleX(1); }
+
+  /* ── DROPDOWN ── */
+  .has-dropdown { position: relative; }
+  .dropdown {
+    position: absolute; top: 100%; left: 0;
+    min-width: 180px;
+    background: rgba(13,11,8,0.97);
+    border: 1px solid var(--dim);
+    border-top: 2px solid var(--amber);
+    opacity: 0; pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 600;
+  }
+  .has-dropdown:hover .dropdown {
+    opacity: 1; pointer-events: all; transform: translateY(0);
+  }
+  .dropdown li a {
+    padding: 10px 18px;
+    font-size: 0.58rem;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid rgba(58,52,44,0.4);
+    letter-spacing: 0.1em;
+  }
+  .dropdown li:last-child a { border-bottom: none; }
+  .dropdown .week-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    color: var(--rust);
+    min-width: 28px;
+  }
+  .dropdown .week-label { color: var(--silver); }
+  .dropdown li a:hover .week-label { color: var(--cream); }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-frame-counter {
+    position: absolute; top: 90px; right: 60px;
+    font-size: 0.55rem; letter-spacing: 0.3em;
+    color: var(--dim);
+    writing-mode: vertical-rl;
+  }
+
+  .hero-timecode {
+    position: absolute; bottom: 40px; left: 80px;
+    font-size: 0.6rem; letter-spacing: 0.15em; color: var(--dim);
+  }
+  .hero-timecode span { color: var(--rust); }
+
+  .hero-reel {
+    position: absolute; right: -40px; top: 50%;
+    transform: translateY(-50%);
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    border: 2px solid #2a2218;
+    opacity: 0.12;
+    animation: spin 40s linear infinite;
+  }
+  .hero-reel::before {
+    content: '';
+    position: absolute; inset: 30px;
+    border-radius: 50%;
+    border: 2px dashed var(--dim);
+  }
+  .hero-reel::after {
+    content: '';
+    position: absolute; inset: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--dim) 0%, transparent 70%);
+  }
+  @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+  .hero-eyebrow {
+    font-size: 0.6rem; letter-spacing: 0.4em;
+    color: var(--rust); text-transform: uppercase;
+    margin-bottom: 20px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 12vw, 10rem);
+    line-height: 0.88;
+    letter-spacing: 0.02em;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+  .hero-title em {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--amber);
+    display: block;
+  }
+  .hero-sub {
+    margin-top: 32px;
+    font-size: 0.7rem; letter-spacing: 0.12em;
+    color: var(--silver);
+    max-width: 380px;
+    line-height: 1.8;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+  .hero-cta {
+    margin-top: 48px;
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--amber);
+    text-decoration: none;
+    animation: fadeUp 0.8s ease 0.3s both;
+    transition: gap 0.2s;
+  }
+  .hero-cta:hover { gap: 20px; }
+  .hero-cta .arrow {
+    width: 40px; height: 1px; background: var(--amber);
+    position: relative; transition: width 0.2s;
+  }
+  .hero-cta:hover .arrow { width: 56px; }
+  .hero-cta .arrow::after {
+    content: ''; position: absolute; right: 0; top: -3px;
+    width: 6px; height: 6px;
+    border-right: 1px solid var(--amber);
+    border-top: 1px solid var(--amber);
+    transform: rotate(45deg);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    padding: 100px 80px;
+    position: relative;
+  }
+  .section-label {
+    font-size: 0.55rem; letter-spacing: 0.4em; color: var(--rust);
+    text-transform: uppercase; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::before {
+    content: ''; width: 30px; height: 1px; background: var(--rust);
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 40px;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    border-top: 1px solid var(--dim);
+  }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    align-items: start;
+  }
+  .about-text p {
+    font-size: 0.72rem; line-height: 2; color: var(--silver);
+    margin-bottom: 20px; letter-spacing: 0.04em;
+  }
+  .about-text p strong { color: var(--cream); font-weight: 400; }
+  .about-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--dim);
+    border: 1px solid var(--dim);
+    align-self: start; margin-top: 60px;
+  }
+  .stat-box {
+    background: var(--film);
+    padding: 30px 24px;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem; color: var(--amber);
+    line-height: 1;
+  }
+  .stat-desc {
+    font-size: 0.55rem; letter-spacing: 0.2em; color: var(--silver);
+    text-transform: uppercase; margin-top: 6px;
+  }
+
+  /* Technique list */
+  .technique-list {
+    list-style: none; margin-top: 8px;
+  }
+  .technique-list li {
+    font-size: 0.65rem; letter-spacing: 0.1em; color: var(--silver);
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(58,52,44,0.4);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .technique-list li::before {
+    content: '◈'; color: var(--rust); font-size: 0.5rem;
+  }
+
+  /* ── 3D PLANETS ── */
+  #planets {
+    border-top: 1px solid var(--dim);
+    background: radial-gradient(ellipse at 80% 50%, rgba(192,64,30,0.06) 0%, transparent 70%);
+  }
+  .planets-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    margin-top: 20px;
+  }
+  .planet-card {
+    position: relative; aspect-ratio: 1;
+    overflow: hidden; cursor: pointer;
+    background: #12100d;
+    border: 1px solid var(--dim);
+  }
+  .planet-orb {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .orb {
+    border-radius: 50%;
+    position: relative;
+    box-shadow: inset -18px -8px 40px rgba(0,0,0,0.7);
+    transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .planet-card:hover .orb { transform: scale(1.1) rotate(-5deg); }
+
+  .orb-1 {
+    width: 130px; height: 130px;
+    background: radial-gradient(circle at 35% 35%, #d4a862, #7a4010 55%, #2a1005);
+    box-shadow: inset -18px -8px 40px rgba(0,0,0,0.7), 0 0 60px rgba(212,168,98,0.15);
+  }
+  .orb-2 {
+    width: 120px; height: 120px;
+    background: radial-gradient(circle at 35% 35%, #a8c4e0, #3a6080 50%, #0a1a28);
+    box-shadow: inset -15px -8px 35px rgba(0,0,0,0.8), 0 0 50px rgba(168,196,224,0.1);
+  }
+  .orb-3 {
+    width: 140px; height: 140px;
+    background: radial-gradient(circle at 40% 30%, #e8c580, #c04818 50%, #1e0a00);
+    box-shadow: inset -20px -10px 45px rgba(0,0,0,0.7), 0 0 70px rgba(232,197,128,0.12);
+  }
+  .orb-4 {
+    width: 110px; height: 110px;
+    background: radial-gradient(circle at 35% 35%, #c8a0d8, #5a2870 55%, #180820);
+    box-shadow: inset -14px -7px 32px rgba(0,0,0,0.8), 0 0 45px rgba(200,160,216,0.12);
+  }
+  .orb-5 {
+    width: 150px; height: 150px;
+    background: radial-gradient(circle at 38% 32%, #f0d090, #b06820 50%, #280e00);
+    box-shadow: inset -22px -12px 50px rgba(0,0,0,0.65), 0 0 80px rgba(240,208,144,0.15);
+  }
+  .orb-6 {
+    width: 125px; height: 125px;
+    background: radial-gradient(circle at 35% 35%, #90c8a0, #1a5830 55%, #051408);
+    box-shadow: inset -16px -8px 38px rgba(0,0,0,0.75), 0 0 55px rgba(144,200,160,0.1);
+  }
+  /* rings for gas giants */
+  .has-ring::after {
+    content: '';
+    position: absolute;
+    width: 200%; height: 30%;
+    border: 2px solid rgba(232,197,128,0.25);
+    border-radius: 50%;
+    top: 35%; left: -50%;
+    transform: rotate(-18deg);
+    pointer-events: none;
+  }
+
+  .planet-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 20px 18px 16px;
+    background: linear-gradient(to top, rgba(10,8,5,0.95) 60%, transparent);
+    transform: translateY(60%);
+    transition: transform 0.3s ease;
+  }
+  .planet-card:hover .planet-info { transform: translateY(0); }
+  .planet-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem; letter-spacing: 0.1em; color: var(--cream);
+  }
+  .planet-desc {
+    font-size: 0.55rem; letter-spacing: 0.1em; color: var(--silver);
+    line-height: 1.7; margin-top: 4px;
+  }
+
+  /* ── ROTOSCOPING ── */
+  #rotoscoping {
+    border-top: 1px solid var(--dim);
+    background: radial-gradient(ellipse at 20% 80%, rgba(232,145,58,0.04) 0%, transparent 60%);
+  }
+
+  .roto-intro {
+    display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px;
+    align-items: start; margin-bottom: 80px;
+  }
+  .roto-intro p {
+    font-size: 0.7rem; line-height: 2; color: var(--silver);
+    letter-spacing: 0.04em;
+  }
+  .roto-intro p + p { margin-top: 16px; }
+
+  /* Week progress timeline */
+  .timeline {
+    position: relative;
+    padding-left: 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 38px; top: 20px; bottom: 20px;
+    width: 1px; background: var(--dim);
+  }
+
+  .week-entry {
+    display: grid; grid-template-columns: 76px 1fr; gap: 0;
+    margin-bottom: 4px;
+    position: relative;
+  }
+  .week-num-badge {
+    display: flex; flex-direction: column; align-items: center;
+    padding-top: 22px;
+    position: relative; z-index: 2;
+  }
+  .week-num-badge .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: var(--dim);
+    line-height: 1;
+    transition: color 0.3s;
+  }
+  .week-num-badge .dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    border: 1px solid var(--dim);
+    background: var(--film);
+    margin-top: 6px;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .week-card {
+    background: rgba(26,21,16,0.6);
+    border: 1px solid var(--dim);
+    border-left: none;
+    padding: 20px 24px 20px;
+    margin-bottom: 2px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .week-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--amber);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s ease;
+  }
+  .week-entry:hover .week-card { background: rgba(42,33,22,0.8); border-color: #4a3e30; }
+  .week-entry:hover .week-card::before { transform: scaleY(1); }
+  .week-entry:hover .week-num-badge .num { color: var(--amber); }
+  .week-entry:hover .week-num-badge .dot { border-color: var(--amber); background: var(--amber); }
+
+  .week-entry.active .week-card { background: rgba(42,33,22,0.9); border-color: #5a4830; }
+  .week-entry.active .week-card::before { transform: scaleY(1); }
+  .week-entry.active .week-num-badge .num { color: var(--amber); }
+  .week-entry.active .week-num-badge .dot { border-color: var(--amber); background: var(--amber); }
+
+  .week-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .week-title {
+    font-size: 0.65rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--cream);
+  }
+  .week-date {
+    font-size: 0.52rem; color: var(--dim); letter-spacing: 0.1em;
+  }
+  .week-body {
+    font-size: 0.62rem; line-height: 1.8; color: var(--silver);
+    letter-spacing: 0.04em;
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s ease, padding-top 0.3s;
+  }
+  .week-entry.active .week-body {
+    max-height: 300px; padding-top: 10px;
+  }
+  .week-tags {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;
+  }
+  .tag {
+    font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--dim); color: var(--silver);
+    border-radius: 1px;
+  }
+
+  .week-progress-bar {
+    height: 2px; background: var(--dim); margin-top: 10px;
+    position: relative; overflow: visible;
+  }
+  .week-progress-fill {
+    height: 100%; background: var(--amber);
+    transition: width 0.6s ease;
+  }
+  .week-progress-pct {
+    position: absolute; right: 0; top: -14px;
+    font-size: 0.5rem; color: var(--amber); letter-spacing: 0.1em;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--dim);
+    padding: 40px 80px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-left { font-size: 0.55rem; color: var(--dim); letter-spacing: 0.15em; }
+  .footer-mark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem; color: var(--amber); letter-spacing: 0.15em;
+  }
+  .footer-right {
+    font-size: 0.52rem; color: var(--dim); letter-spacing: 0.15em;
+    text-align: right;
+  }
+
+  /* ── SCROLL INDICATOR ── */
+  .scroll-line {
+    position: fixed; bottom: 40px; right: 60px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    z-index: 200;
+  }
+  .scroll-line span {
+    font-size: 0.48rem; letter-spacing: 0.3em; color: var(--dim);
+    writing-mode: vertical-rl; text-transform: uppercase;
+  }
+  .scroll-line .line {
+    width: 1px; height: 50px; background: var(--dim);
+    position: relative; overflow: hidden;
+  }
+  .scroll-line .line::after {
+    content: '';
+    position: absolute; top: -100%; left: 0; width: 100%; height: 100%;
+    background: var(--amber);
+    animation: scanDown 1.8s ease-in-out infinite;
+  }
+  @keyframes scanDown {
+    to { top: 200%; }
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .divider {
+    display: flex; align-items: center; gap: 20px;
+    margin-bottom: 60px;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--dim); }
+  .divider-icon { color: var(--rust); font-size: 0.7rem; }
+</style>
+</head>
+<body>
+
+<!-- Sprocket holes -->
+<div class="sprocket-strip left">
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+</div>
+<div class="sprocket-strip right">
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+  <div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+</div>
+
+<!-- Navigation -->
+<nav>
+  <a class="nav-logo" href="#home">ROTO</a>
+  <ul class="nav-links">
+    <li><a href="#home" class="active">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#planets">3D Planets</a></li>
+    <li class="has-dropdown">
+      <a href="#rotoscoping">Rotoscoping</a>
+      <ul class="dropdown" id="weekDropdown"></ul>
+    </li>
+  </ul>
+</nav>
+
+<!-- Scroll indicator -->
+<div class="scroll-line">
+  <div class="line"></div>
+  <span>Scroll</span>
+</div>
+
+<!-- ═══ HOME ═══ -->
+<section id="home">
+  <div class="hero-frame-counter">FRAME 0001 / 24 FPS</div>
+  <div class="hero-reel"></div>
+
+  <p class="hero-eyebrow">Animation &amp; Motion Arts</p>
+  <h1 class="hero-title">
+    Frame by<br>
+    <em>Frame</em>
+  </h1>
+  <p class="hero-sub">A 12-week journey through rotoscoping — tracing light, motion, and form from reference footage into hand-crafted animation.</p>
+  <a href="#rotoscoping" class="hero-cta">
+    View Progress <span class="arrow"></span>
+  </a>
+
+  <div class="hero-timecode">TC <span>00:00:00:00</span> ■ 24.00p ■ REC</div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about">
+  <div class="section-label">001 — About</div>
+  <h2 class="section-title">The Process</h2>
+
+  <div class="about-grid">
+    <div class="about-text">
+      <p><strong>Rotoscoping</strong> is the technique of tracing over footage, frame by frame, to produce realistic action in animation. Originally patented in 1917 by Max Fleischer, it remains one of the most painstaking and rewarding crafts in animation.</p>
+      <p>This project documents a full semester of study — 12 weeks of practice, experimentation, and iteration. From basic line tracing on Week 1 to complex multi-layer compositing by Week 12.</p>
+      <p>Tools used include <strong>Adobe After Effects</strong>, <strong>Procreate</strong>, <strong>DaVinci Resolve</strong>, and custom Python scripts for frame extraction.</p>
+
+      <ul class="technique-list">
+        <li>Frame-by-frame hand tracing</li>
+        <li>Photoshop &amp; After Effects compositing</li>
+        <li>Motion blur simulation</li>
+        <li>Colour &amp; tone matching</li>
+        <li>3D reference integration</li>
+      </ul>
+    </div>
+
+    <div class="about-stats">
+      <div class="stat-box">
+        <div class="stat-num">12</div>
+        <div class="stat-desc">Weeks of Study</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">24</div>
+        <div class="stat-desc">Frames Per Second</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">6</div>
+        <div class="stat-desc">3D Planet Models</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">∞</div>
+        <div class="stat-desc">Hours of Iteration</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 3D PLANETS ═══ -->
+<section id="planets">
+  <div class="section-label">002 — 3D Work</div>
+  <h2 class="section-title">Planets</h2>
+
+  <div class="planets-grid">
+    <div class="planet-card">
+      <div class="planet-orb"><div class="orb orb-1"></div></div>
+      <div class="planet-info">
+        <div class="planet-name">Mercury</div>
+        <div class="planet-desc">Rocky surface study — texturing craters and high-contrast light maps.</div>
+      </div>
+    </div>
+    <div class="planet-card">
+      <div class="planet-orb"><div class="orb orb-2"></div></div>
+      <div class="planet-info">
+        <div class="planet-name">Neptune</div>
+        <div class="planet-desc">Deep atmosphere simulation with volumetric cloud layers.</div>
+      </div>
+    </div>
+    <div class="planet-card">
+      <div class="planet-orb"><div class="orb orb-3 has-ring"></div></div>
+      <div class="planet-info">
+        <div class="planet-name">Jupiter</div>
+        <div class="planet-desc">Gas giant — procedural band generation and Great Red Spot.</div>
+      </div>
+    </div>
+    <div class="planet-card">
+      <div class="planet-orb"><div class="orb orb-4"></div></div>
+      <div class="planet-info">
+        <div class="planet-name">Kepler-22b</div>
+        <div class="planet-desc">Fictional exoplanet concept — custom shader work and soft emission.</div>
+      </div>
+    </div>
+    <div class="planet-card">
+      <div class="planet-orb"><div class="orb orb-5 has-ring"></div></div>
+      <div class="planet-info">
+        <div class="planet-name">Saturn</div>
+        <div class="planet-desc">Ring system geometry with transparency and shadow casting.</div>
+      </div>
+    </div>
+    <div class="planet-card">
+      <div class="planet-orb"><div class="orb orb-6"></div></div>
+      <div class="planet-info">
+        <div class="planet-name">Verdanis</div>
+        <div class="planet-desc">Lush concept world — biome colour studies and moisture mapping.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ROTOSCOPING ═══ -->
+<section id="rotoscoping">
+  <div class="section-label">003 — Rotoscoping</div>
+  <h2 class="section-title">12-Week Progress</h2>
+
+  <div class="roto-intro">
+    <div>
+      <p>Each week builds on the last. Click any week to expand notes, techniques used, and progress metrics.</p>
+      <p>The timeline covers everything from initial frame extraction to full-motion compositing.</p>
+    </div>
+    <div>
+      <p>Reference footage was sourced from public domain film archives and personal recordings. All rotoscoped output is original artwork created frame by frame.</p>
+    </div>
+  </div>
+
+  <div class="timeline" id="weekTimeline"></div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-left">© 2024 — ROTOSCOPING JOURNAL<br>HOSTED ON GITHUB PAGES</div>
+  <div class="footer-mark">ROTO</div>
+  <div class="footer-right">FRAME BY FRAME<br>24 FPS · 12 WEEKS</div>
+</footer>
+
+<script>
+// ── Week data ──────────────────────────────────────────────────────────
+const weeks = [
+  {
+    title: "Introduction to Rotoscoping",
+    date: "Week 1",
+    body: "Set up the workspace and extracted first frames from reference footage. Practiced basic line tracing over still images to understand weight and proportion. Learned keyboard shortcuts in After Effects for frame stepping.",
+    tags: ["Setup", "Line Tracing", "After Effects"],
+    progress: 8
+  },
+  {
+    title: "Frame Extraction & Workflow",
+    date: "Week 2",
+    body: "Built a Python script to batch-export frames at 24fps. Established a naming convention and folder structure that would scale for 12 weeks. First full traced sequence: a 2-second hand movement.",
+    tags: ["Python", "Pipeline", "Hands"],
+    progress: 16
+  },
+  {
+    title: "Tracing Body Motion",
+    date: "Week 3",
+    body: "Moved from isolated limbs to full body movement. Studied how the spine acts as the root of all motion. Discovered the importance of tracing on 2s (every other frame) to maintain fluidity without overworking.",
+    tags: ["Body Mechanics", "Timing", "Spine"],
+    progress: 24
+  },
+  {
+    title: "Line Quality & Weight",
+    date: "Week 4",
+    body: "Focused on varying line weight to communicate depth and structure. Heavy lines for silhouette, thin lines for interior detail. Experimented with tapered brush settings in Procreate.",
+    tags: ["Line Art", "Procreate", "Depth"],
+    progress: 32
+  },
+  {
+    title: "Facial Animation",
+    date: "Week 5",
+    body: "Tackled the hardest subject: the face. Traced a talking sequence, focusing on lip sync and eye movement. Learned to simplify without losing expressiveness — the 'lie of animation'.",
+    tags: ["Facial", "Lip Sync", "Expression"],
+    progress: 40
+  },
+  {
+    title: "Colour & Tone Pass",
+    date: "Week 6",
+    body: "Added colour underneath the line art for the first time. Built a limited palette per scene. Studied how shadow placement tells the story of form and light source.",
+    tags: ["Colour", "Shadow", "Palette"],
+    progress: 50
+  },
+  {
+    title: "Reference Integration",
+    date: "Week 7",
+    body: "Cross-referenced rotoscoped lines with 3D planet renders to create a hybrid composite. The planets were rendered in Blender and used as lighting references behind the traced figures.",
+    tags: ["Blender", "Composite", "Hybrid"],
+    progress: 58
+  },
+  {
+    title: "Motion Blur & Speed",
+    date: "Week 8",
+    body: "Manually painted motion blur on fast-moving frames. Studied smear frames — the animation trick where one exaggerated in-between replaces 3–4 normal frames to convey speed.",
+    tags: ["Motion Blur", "Smear Frames", "Speed"],
+    progress: 66
+  },
+  {
+    title: "Atmospheric & FX Layers",
+    date: "Week 9",
+    body: "Added particle effects, dust motes, and atmospheric haze using After Effects. Learned to use adjustment layers and blend modes to integrate FX without overpowering the traced line art.",
+    tags: ["FX", "After Effects", "Particles"],
+    progress: 74
+  },
+  {
+    title: "Sound & Timing Sync",
+    date: "Week 10",
+    body: "Synced the animation to a custom sound design track. Used audio waveform markers to hit key poses exactly on beat. Discovered how sound can 'complete' a visual that is rough on its own.",
+    tags: ["Sound Design", "Timing", "Sync"],
+    progress: 82
+  },
+  {
+    title: "Multi-Layer Compositing",
+    date: "Week 11",
+    body: "Combined all elements into a single timeline: reference video, traced line art, colour fills, FX, 3D background planets, and sound. Managed 34 separate layers across a 30-second sequence.",
+    tags: ["Compositing", "Multi-layer", "30sec"],
+    progress: 90
+  },
+  {
+    title: "Final Output & Review",
+    date: "Week 12",
+    body: "Rendered the final piece at 4K/24fps. Reviewed the full 12-week journey, compiled a before/after comparison, and documented lessons learned. Exported for GitHub Pages and Vimeo.",
+    tags: ["Final Render", "4K", "Export", "Review"],
+    progress: 100
+  }
+];
+
+// ── Build dropdown ─────────────────────────────────────────────────────
+const dropdown = document.getElementById('weekDropdown');
+weeks.forEach((w, i) => {
+  const li = document.createElement('li');
+  li.innerHTML = `<a href="#week-${i+1}"><span class="week-num">W${String(i+1).padStart(2,'0')}</span><span class="week-label">${w.title}</span></a>`;
+  dropdown.appendChild(li);
+});
+
+// ── Build timeline ─────────────────────────────────────────────────────
+const timeline = document.getElementById('weekTimeline');
+weeks.forEach((w, i) => {
+  const entry = document.createElement('div');
+  entry.className = 'week-entry' + (i === 0 ? ' active' : '');
+  entry.id = `week-${i+1}`;
+  entry.innerHTML = `
+    <div class="week-num-badge">
+      <div class="num">${String(i+1).padStart(2,'0')}</div>
+      <div class="dot"></div>
+    </div>
+    <div class="week-card">
+      <div class="week-header">
+        <span class="week-title">${w.title}</span>
+        <span class="week-date">${w.date}</span>
+      </div>
+      <div class="week-progress-bar">
+        <div class="week-progress-fill" style="width:${w.progress}%"></div>
+        <span class="week-progress-pct">${w.progress}%</span>
+      </div>
+      <div class="week-body">
+        <p>${w.body}</p>
+        <div class="week-tags">${w.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+    </div>
+  `;
+  entry.addEventListener('click', () => {
+    document.querySelectorAll('.week-entry').forEach(e => e.classList.remove('active'));
+    entry.classList.add('active');
+  });
+  timeline.appendChild(entry);
+});
+
+// ── Nav active state on scroll ─────────────────────────────────────────
+const sections = ['home','about','planets','rotoscoping'];
+const navLinks = document.querySelectorAll('.nav-links > li > a');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id);
+      });
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) observer.observe(el);
+});
+
+// ── Timecode update ────────────────────────────────────────────────────
+const tc = document.querySelector('.hero-timecode span');
+let frame = 0;
+setInterval(() => {
+  frame++;
+  const f = frame % 24;
+  const s = Math.floor(frame / 24) % 60;
+  const m = Math.floor(frame / (24*60)) % 60;
+  const h = Math.floor(frame / (24*3600));
+  tc.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}:${String(f).padStart(2,'0')}`;
+}, 1000/24);
+</script>
+</body>
+</html>
