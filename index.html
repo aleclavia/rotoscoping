@@ -4,821 +4,968 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rotoscoping — MMA Portfolio</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root {
-  --black:    #04060f;
-  --navy-900: #070d1f;
-  --navy-800: #0b1430;
-  --navy-700: #0f1d45;
-  --navy-600: #152559;
-  --navy-500: #1c306e;
-  --navy-400: #2a4494;
-  --blue:     #3a5fc4;
-  --electric: #5b8af7;
-  --ice:      #a8c4ff;
-  --white:    #e8edf8;
-  --silver:   #7a8aaa;
-  --dim:      #2e3a56;
-  --accent:   #f5c842;
-  --rust:     #e05a2b;
+  --black:    #050608;
+  --navy-900: #060c1a;
+  --navy-800: #0a1428;
+  --navy-700: #0d1c38;
+  --navy-600: #112248;
+  --navy-500: #1a3460;
+  --navy-400: #1e3f78;
+  --blue:     #1e6fff;
+  --blue-lt:  #4d8fff;
+  --cyan:     #00c8ff;
+  --silver:   #8aa0c0;
+  --steel:    #4a6080;
+  --white:    #e8edf5;
+  --dim:      #1e2d45;
+  --glow:     rgba(0,200,255,0.12);
 }
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body {
-  background: var(--black);
-  color: var(--white);
-  font-family: 'Syne', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--black);
+  color:var(--white);
+  font-family:'Rajdhani',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
 }
-body::after {
-  content:''; position:fixed; inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  pointer-events:none; z-index:9000; mix-blend-mode:overlay;
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;border:none;background:none;font-family:inherit;color:inherit;}
+
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--navy-900);}
+::-webkit-scrollbar-thumb{background:var(--navy-500);border-radius:2px;}
+
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9998;mix-blend-mode:overlay;
 }
 
-/* ── NAVBAR ── */
-#navbar {
-  position:fixed; top:0; left:0; right:0; z-index:800;
-  background:rgba(4,6,15,0.94);
+/* ── STARS ── */
+.stars{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(1px 1px at 8% 12%, rgba(255,255,255,0.55) 0%,transparent 100%),
+    radial-gradient(1px 1px at 22% 38%, rgba(255,255,255,0.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 37% 8%, rgba(255,255,255,0.45) 0%,transparent 100%),
+    radial-gradient(1px 1px at 52% 58%, rgba(255,255,255,0.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 68% 22%, rgba(255,255,255,0.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 83% 48%, rgba(255,255,255,0.35) 0%,transparent 100%),
+    radial-gradient(1px 1px at 91% 78%, rgba(255,255,255,0.45) 0%,transparent 100%),
+    radial-gradient(1px 1px at 14% 68%, rgba(255,255,255,0.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 58% 82%, rgba(255,255,255,0.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 33% 88%, rgba(255,255,255,0.25) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 76% 14%, rgba(180,210,255,0.6) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 45% 30%, rgba(180,210,255,0.45) 0%,transparent 100%),
+    radial-gradient(2px 2px at 17% 52%, rgba(0,200,255,0.35) 0%,transparent 100%),
+    radial-gradient(2px 2px at 61% 17%, rgba(0,200,255,0.28) 0%,transparent 100%),
+    radial-gradient(1px 1px at 4% 44%, rgba(255,255,255,0.2) 0%,transparent 100%),
+    radial-gradient(1px 1px at 96% 33%, rgba(255,255,255,0.3) 0%,transparent 100%);
+}
+
+/* ── NAV ── */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:linear-gradient(to bottom,rgba(5,6,8,0.97) 0%,rgba(6,12,26,0.93) 100%);
+  border-bottom:1px solid rgba(30,111,255,0.18);
   backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--dim);
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 52px; height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 52px;height:64px;
 }
-.nav-logo {
-  font-family:'Bebas Neue',sans-serif;
-  font-size:1.5rem; letter-spacing:0.12em; color:var(--electric);
-  cursor:pointer; user-select:none;
+.nav-logo{
+  font-family:'Rajdhani',sans-serif;font-weight:700;
+  font-size:1.25rem;letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--cyan);display:flex;align-items:center;gap:10px;
 }
-.nav-logo span { color:var(--accent); }
-.nav-links { display:flex; align-items:center; gap:4px; list-style:none; }
-.nav-links > li { position:relative; }
-.nav-links > li > a {
-  display:block; padding:8px 15px;
-  font-size:0.63rem; letter-spacing:0.22em; text-transform:uppercase;
-  color:var(--silver); text-decoration:none; cursor:pointer;
-  transition:color 0.2s, background 0.2s; border-radius:3px;
+.nav-logo-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--blue);
+  box-shadow:0 0 8px var(--blue);
 }
-.nav-links > li > a:hover { color:var(--white); background:rgba(91,138,247,0.08); }
-.nav-links > li > a.active { color:var(--electric); background:rgba(91,138,247,0.06); }
-.nav-dropdown-btn { display:flex; align-items:center; gap:5px; }
-.nav-dropdown-btn::after { content:'▾'; font-size:0.7rem; color:var(--silver); }
-.nav-dropdown {
-  position:absolute; top:calc(100% + 8px); left:0;
-  min-width:210px; background:var(--navy-900);
-  border:1px solid var(--dim); border-top:2px solid var(--electric);
-  border-radius:0 0 6px 6px;
-  opacity:0; pointer-events:none;
-  transform:translateY(6px);
-  transition:opacity 0.2s, transform 0.2s;
-  z-index:900; max-height:370px; overflow-y:auto;
+.nav-logo .lo-white{color:var(--white);}
+.nav-links{display:flex;align-items:center;list-style:none;gap:2px;}
+.nav-links li{position:relative;}
+.nav-links li>a,.nav-links li>button{
+  display:block;padding:8px 18px;
+  font-size:0.75rem;letter-spacing:0.18em;text-transform:uppercase;
+  font-weight:600;color:var(--silver);
+  transition:color 0.2s;background:none;border:none;
 }
-.nav-links > li:hover .nav-dropdown { opacity:1; pointer-events:all; transform:translateY(0); }
-.nav-dropdown li a {
-  display:flex; align-items:center; gap:10px;
-  padding:9px 16px; font-size:0.6rem; letter-spacing:0.1em;
-  color:var(--silver); text-decoration:none; cursor:pointer;
-  border-bottom:1px solid rgba(46,58,86,0.4);
-  transition:background 0.15s, color 0.15s;
+.nav-links li>a:hover,.nav-links li>button:hover,
+.nav-links li>a.active,.nav-links li>button.active{color:var(--cyan);}
+.nav-links li>a.active::after{
+  content:'';position:absolute;bottom:-1px;left:18px;right:18px;
+  height:2px;background:var(--cyan);
+  box-shadow:0 0 10px rgba(0,200,255,0.6);
 }
-.nav-dropdown li:last-child a { border-bottom:none; }
-.nav-dropdown li a:hover { background:rgba(91,138,247,0.08); color:var(--white); }
-.nav-dropdown .wk { font-family:'Bebas Neue',sans-serif; font-size:1rem; color:var(--electric); min-width:28px; }
+.nav-dropdown{
+  position:absolute;top:calc(100% + 1px);left:0;
+  min-width:230px;
+  background:rgba(6,12,26,0.98);
+  border:1px solid rgba(30,111,255,0.22);
+  border-top:2px solid var(--cyan);
+  opacity:0;pointer-events:none;
+  transform:translateY(8px);
+  transition:opacity 0.2s,transform 0.2s;
+  z-index:1001;backdrop-filter:blur(14px);
+}
+.nav-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0);}
+.nav-dropdown a{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 18px;
+  font-size:0.7rem;letter-spacing:0.1em;
+  color:var(--silver);font-weight:500;
+  border-bottom:1px solid rgba(30,45,69,0.6);
+  transition:background 0.15s,color 0.15s;
+}
+.nav-dropdown a:last-child{border-bottom:none;}
+.nav-dropdown a:hover{background:rgba(30,111,255,0.08);color:var(--white);}
+.nav-dropdown .wk-num{
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.65rem;color:var(--blue-lt);min-width:32px;
+}
 
-/* ── PAGE SYSTEM ── */
-.page { display:none; min-height:100vh; padding-top:64px; }
-.page.active { display:block; }
+/* ── PAGES ── */
+.page{display:none;min-height:100vh;padding-top:64px;}
+.page.active{display:block;}
 
-/* ════════════════════ HOME ════════════════════ */
-#page-home { position:relative; overflow:hidden; display:flex; flex-direction:column; }
-.stars { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
-.star {
-  position:absolute; border-radius:50%; background:#fff;
-  animation:twinkle var(--dur) ease-in-out infinite alternate;
-}
-@keyframes twinkle { from{opacity:0.05} to{opacity:var(--max)} }
-.home-glow {
-  position:absolute; top:-5%; left:50%; transform:translateX(-50%);
-  width:1000px; height:650px;
-  background:radial-gradient(ellipse, rgba(21,37,89,0.9) 0%, transparent 70%);
-  pointer-events:none;
-}
-.home-glow2 {
-  position:absolute; bottom:-20%; right:-8%;
-  width:700px; height:700px;
-  background:radial-gradient(ellipse, rgba(91,138,247,0.06) 0%, transparent 65%);
-  pointer-events:none;
-}
-.hero-wrap {
-  position:relative; z-index:2;
-  padding:100px 80px 60px;
+/* ── FADE IN ── */
+.fi{opacity:0;transform:translateY(22px);animation:fadeUp 0.55s ease forwards;}
+.fi1{animation-delay:0.05s;}.fi2{animation-delay:0.13s;}.fi3{animation-delay:0.21s;}
+.fi4{animation-delay:0.29s;}.fi5{animation-delay:0.37s;}.fi6{animation-delay:0.45s;}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+
+/* ═══════════════════ HOME ═══════════════════ */
+.home-hero{
+  position:relative;z-index:2;
   min-height:calc(100vh - 64px);
-  display:flex; flex-direction:column; justify-content:center;
-  max-width:1100px;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 80px 100px;overflow:hidden;
 }
-.hero-eyebrow {
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.62rem; letter-spacing:0.35em; color:var(--electric);
-  text-transform:uppercase; margin-bottom:26px;
-  display:flex; align-items:center; gap:12px;
-  animation:fadeUp 0.9s ease both;
+.home-glow{
+  position:absolute;pointer-events:none;border-radius:50%;
 }
-.hero-eyebrow::before { content:''; width:36px; height:1px; background:var(--electric); }
-.hero-title {
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(5rem,13vw,11rem);
-  line-height:0.88; letter-spacing:0.02em;
-  animation:fadeUp 0.9s ease 0.08s both;
+.home-glow-1{
+  width:700px;height:700px;
+  background:radial-gradient(circle,rgba(30,111,255,0.07) 0%,transparent 70%);
+  top:-150px;right:-150px;
 }
-.hero-title .hl { color:var(--electric); }
-.hero-title .outline {
-  -webkit-text-stroke:1.5px rgba(91,138,247,0.45);
-  color:transparent; display:block;
+.home-glow-2{
+  width:450px;height:450px;
+  background:radial-gradient(circle,rgba(0,200,255,0.05) 0%,transparent 70%);
+  bottom:80px;left:5%;
 }
-.hero-desc {
-  margin-top:32px; font-size:0.76rem; line-height:2;
-  color:var(--silver); max-width:500px; letter-spacing:0.025em;
-  animation:fadeUp 0.9s ease 0.16s both;
+.home-eyebrow{
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.7rem;letter-spacing:0.35em;color:var(--cyan);
+  text-transform:uppercase;margin-bottom:28px;
+  display:flex;align-items:center;gap:14px;
 }
-.hero-desc strong { color:var(--white); font-weight:600; }
-.hero-ctas {
-  margin-top:48px; display:flex; gap:16px; flex-wrap:wrap;
-  animation:fadeUp 0.9s ease 0.24s both;
+.home-eyebrow::before{content:'';width:44px;height:1px;background:var(--cyan);box-shadow:0 0 6px var(--cyan);}
+.home-title{
+  font-family:'Rajdhani',sans-serif;font-weight:700;
+  font-size:clamp(4.5rem,11vw,10rem);
+  line-height:0.88;letter-spacing:-0.01em;margin-bottom:36px;
 }
-.btn-primary {
-  padding:13px 32px; background:var(--electric); color:var(--black);
-  font-size:0.62rem; letter-spacing:0.25em; text-transform:uppercase;
-  font-family:'Syne',sans-serif; font-weight:700;
-  border:none; cursor:pointer; border-radius:2px;
-  transition:background 0.2s, transform 0.15s;
+.home-title .line1{display:block;color:var(--white);}
+.home-title .line2{
+  display:block;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--cyan) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.btn-primary:hover { background:var(--ice); transform:translateY(-2px); }
-.btn-outline {
-  padding:13px 32px; background:transparent; color:var(--electric);
-  font-size:0.62rem; letter-spacing:0.25em; text-transform:uppercase;
-  font-family:'Syne',sans-serif; font-weight:700;
-  border:1px solid var(--blue); cursor:pointer; border-radius:2px;
-  transition:border-color 0.2s, color 0.2s, transform 0.15s;
+.home-sub{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:1.35rem;
+  color:var(--silver);max-width:540px;line-height:1.75;margin-bottom:56px;
 }
-.btn-outline:hover { border-color:var(--electric); color:var(--ice); transform:translateY(-2px); }
-.home-cards {
-  position:relative; z-index:2;
-  display:grid; grid-template-columns:repeat(3,1fr);
-  gap:1px; background:var(--dim);
-  margin:0 80px 0;
-  border:1px solid var(--dim);
+.home-btns{display:flex;gap:16px;flex-wrap:wrap;}
+.btn-primary{
+  padding:14px 40px;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-lt) 100%);
+  color:var(--white);font-weight:700;
+  font-size:0.76rem;letter-spacing:0.22em;text-transform:uppercase;
+  clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+  transition:opacity 0.2s,transform 0.2s;
+  box-shadow:0 0 28px rgba(30,111,255,0.32);
 }
-.home-card {
-  background:var(--navy-900); padding:36px 32px;
-  cursor:pointer; transition:background 0.2s;
-  position:relative; overflow:hidden;
+.btn-primary:hover{opacity:0.82;transform:translateY(-2px);}
+.btn-secondary{
+  padding:13px 40px;background:transparent;
+  color:var(--cyan);font-weight:600;
+  font-size:0.76rem;letter-spacing:0.22em;text-transform:uppercase;
+  border:1px solid rgba(0,200,255,0.38);
+  clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+  transition:background 0.2s,border-color 0.2s;
 }
-.home-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background:var(--electric);
-  transform:scaleX(0); transform-origin:left;
-  transition:transform 0.3s ease;
+.btn-secondary:hover{background:rgba(0,200,255,0.07);border-color:var(--cyan);}
+
+.home-stats{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid rgba(30,111,255,0.15);
 }
-.home-card:hover { background:var(--navy-800); }
-.home-card:hover::before { transform:scaleX(1); }
-.hc-num { font-family:'Bebas Neue',sans-serif; font-size:3.5rem; color:var(--navy-700); line-height:1; margin-bottom:12px; }
-.hc-title { font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); margin-bottom:10px; font-weight:700; }
-.hc-body { font-size:0.63rem; line-height:1.85; color:var(--silver); }
-.scroll-hint {
-  position:absolute; bottom:36px; left:80px; z-index:2;
-  display:flex; align-items:center; gap:12px;
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.52rem; letter-spacing:0.3em; color:var(--dim);
+.stat-item{
+  padding:38px 44px;
+  border-right:1px solid rgba(30,111,255,0.12);
+  background:rgba(6,12,26,0.4);
+}
+.stat-item:last-child{border-right:none;}
+.stat-num{
+  font-family:'Rajdhani',sans-serif;font-weight:700;
+  font-size:3.2rem;line-height:1;
+  background:linear-gradient(135deg,var(--blue-lt),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.stat-label{
+  font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--steel);margin-top:6px;font-weight:600;
+}
+
+/* ═══════════════════ ABOUT ═══════════════════ */
+#page-about{background:linear-gradient(180deg,var(--black) 0%,var(--navy-900) 100%);}
+.section-header{
+  padding:80px 80px 56px;
+  border-bottom:1px solid var(--dim);
+  position:relative;overflow:hidden;
+}
+.section-header .bg-text{
+  position:absolute;right:-10px;top:10px;
+  font-family:'Rajdhani',sans-serif;font-weight:700;
+  font-size:16rem;line-height:1;letter-spacing:-0.05em;
+  color:rgba(30,111,255,0.03);pointer-events:none;user-select:none;
+}
+.page-eyebrow{
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.66rem;letter-spacing:0.35em;color:var(--cyan);
+  text-transform:uppercase;margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.page-eyebrow::before{content:'';width:26px;height:1px;background:var(--cyan);}
+.page-title{
+  font-family:'Rajdhani',sans-serif;font-weight:700;
+  font-size:clamp(2.6rem,6vw,5.2rem);
+  line-height:1;letter-spacing:0.02em;margin-bottom:20px;
+}
+.page-title .acc{
+  background:linear-gradient(135deg,var(--blue-lt),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.page-lead{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;line-height:1.8;color:var(--silver);max-width:580px;
+}
+
+.about-blocks{
+  display:grid;grid-template-columns:1fr 1fr;gap:2px;
+  background:var(--dim);border-top:2px solid var(--dim);
+}
+.about-block{
+  background:var(--navy-900);
+  padding:52px 56px;
+}
+.about-block:nth-child(even){background:rgba(6,12,26,0.55);}
+.about-icon{font-size:2rem;margin-bottom:18px;display:block;}
+.about-block h3{
+  font-size:1.15rem;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--white);margin-bottom:16px;
+}
+.about-block p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;line-height:1.85;color:var(--silver);
+}
+.about-block p+p{margin-top:12px;}
+.about-block strong{color:var(--white);font-style:italic;}
+
+.about-course{
+  margin:56px 80px;
+  background:linear-gradient(135deg,rgba(10,20,40,0.85),rgba(6,12,26,0.95));
+  border:1px solid rgba(30,111,255,0.22);
+  border-left:3px solid var(--cyan);
+  padding:40px 48px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:40px;
+  position:relative;overflow:hidden;
+}
+.about-course::before{
+  content:'';position:absolute;top:0;right:0;
+  width:240px;height:240px;
+  background:radial-gradient(circle,rgba(0,200,255,0.04) 0%,transparent 70%);
+}
+.cd-label{
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.58rem;letter-spacing:0.22em;color:var(--steel);
+  text-transform:uppercase;margin-bottom:5px;
+}
+.cd-val{font-size:1.05rem;font-weight:600;color:var(--white);}
+
+.about-tl{padding:56px 80px 80px;}
+.about-tl h2{
+  font-size:1.4rem;font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;margin-bottom:36px;color:var(--white);
+}
+.tl-wrap{position:relative;padding-left:28px;}
+.tl-wrap::before{
+  content:'';position:absolute;left:0;top:8px;bottom:8px;
+  width:1px;background:linear-gradient(to bottom,var(--blue),transparent);
+}
+.tl-row{
+  position:relative;padding:0 0 32px 38px;
+  display:grid;grid-template-columns:110px 1fr;gap:20px;
+}
+.tl-row::before{
+  content:'';position:absolute;left:-4.5px;top:6px;
+  width:9px;height:9px;border-radius:50%;
+  background:var(--navy-900);border:2px solid var(--blue);
+  box-shadow:0 0 10px rgba(30,111,255,0.5);
+}
+.tl-wk{
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.68rem;color:var(--blue-lt);letter-spacing:0.14em;padding-top:3px;
+}
+.tl-txt{font-family:'Cormorant Garamond',serif;font-size:1rem;line-height:1.8;color:var(--silver);}
+.tl-txt strong{color:var(--white);}
+
+/* ═══════════════════ SOLAR ═══════════════════ */
+#page-solar{background:var(--black);}
+.planets-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:2px;background:var(--dim);
+  margin-top:2px;
+}
+.planet-card{
+  background:var(--navy-900);
+  display:flex;flex-direction:column;
+  border:1px solid transparent;
+  transition:border-color 0.3s;
+  position:relative;overflow:hidden;
+}
+.planet-card:hover{border-color:rgba(0,200,255,0.3);}
+.planet-render{
+  aspect-ratio:1;
+  background:linear-gradient(135deg,var(--navy-800),#060d1e);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.planet-render img{width:100%;height:100%;object-fit:cover;display:block;}
+.planet-render .ph{
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+}
+.orb{border-radius:50%;box-shadow:inset -12px -6px 30px rgba(0,0,0,0.8);}
+.orb-mercury{width:72px;height:72px;background:radial-gradient(circle at 35% 35%,#c8b8a0,#6a5840 55%,#1e1510);}
+.orb-venus{width:82px;height:82px;background:radial-gradient(circle at 35% 35%,#f0d890,#c07820 50%,#3a1a00);}
+.orb-earth{width:88px;height:88px;background:radial-gradient(circle at 38% 32%,#60c8f0,#1a70b0 45%,#0a2850);box-shadow:inset -12px -6px 30px rgba(0,0,0,0.7),0 0 30px rgba(30,150,220,0.15);}
+.orb-mars{width:74px;height:74px;background:radial-gradient(circle at 35% 35%,#d06040,#802010 55%,#200800);}
+.orb-jupiter{width:104px;height:104px;background:radial-gradient(circle at 38% 30%,#f0c880,#c07830 45%,#401800);}
+.orb-saturn{width:96px;height:96px;background:radial-gradient(circle at 36% 34%,#f0d898,#b07028 50%,#381500);}
+.orb-uranus{width:80px;height:80px;background:radial-gradient(circle at 36% 34%,#90d8e8,#2090a8 50%,#082838);}
+.orb-neptune{width:76px;height:76px;background:radial-gradient(circle at 35% 35%,#6090f8,#1040c0 55%,#04102a);}
+.saturn-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
+.saturn-wrap::after{
+  content:'';position:absolute;
+  width:160px;height:30px;
+  border:2px solid rgba(240,208,152,0.28);
+  border-radius:50%;top:50%;transform:translateY(-50%) rotate(-18deg);
+  pointer-events:none;
+}
+.ph-label{
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.54rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--steel);
+}
+.blender-tag{
+  position:absolute;top:10px;right:10px;
+  background:rgba(6,12,26,0.88);
+  border:1px solid rgba(255,130,20,0.4);
+  padding:3px 8px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.48rem;letter-spacing:0.14em;color:rgba(255,160,60,0.85);
   text-transform:uppercase;
 }
-.scroll-bar { width:1px; height:44px; background:var(--dim); position:relative; overflow:hidden; }
-.scroll-bar::after {
-  content:''; position:absolute; top:-100%; left:0; width:100%; height:100%;
-  background:linear-gradient(to bottom, transparent, var(--electric), transparent);
-  animation:scrollAnim 2s ease-in-out infinite;
+.planet-info{
+  padding:20px 22px 22px;
+  border-top:1px solid var(--dim);
+  flex:1;display:flex;flex-direction:column;gap:7px;
 }
-@keyframes scrollAnim { to { top:200%; } }
-@keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
-
-/* ════════════════════ ABOUT ════════════════════ */
-#page-about { padding:100px 80px; }
-.page-eyebrow {
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.6rem; letter-spacing:0.35em; color:var(--electric);
-  text-transform:uppercase; margin-bottom:16px;
-  display:flex; align-items:center; gap:12px;
+.planet-name{
+  font-family:'Rajdhani',sans-serif;font-weight:700;
+  font-size:1.08rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--white);
 }
-.page-eyebrow::before { content:''; width:28px; height:1px; background:var(--electric); }
-.page-title {
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(3rem,7vw,6rem);
-  letter-spacing:0.03em; line-height:0.95; margin-bottom:56px;
+.planet-type{
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.55rem;letter-spacing:0.16em;color:var(--blue-lt);text-transform:uppercase;
 }
-.page-title span { color:var(--electric); }
-.about-layout { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start; }
-.about-section-label {
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.54rem; letter-spacing:0.3em; color:var(--electric);
-  text-transform:uppercase; margin-bottom:22px;
-  padding-bottom:10px; border-bottom:1px solid var(--dim);
+.planet-desc{
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.88rem;line-height:1.7;color:var(--silver);flex:1;margin-top:4px;
 }
-.about-body p { font-size:0.72rem; line-height:2; color:var(--silver); margin-bottom:18px; letter-spacing:0.02em; }
-.about-body p strong { color:var(--white); font-weight:600; }
-.about-body p em { color:var(--electric); font-style:normal; }
-.about-aside { display:flex; flex-direction:column; gap:14px; }
-.info-block {
-  background:var(--navy-900); border:1px solid var(--dim);
-  border-left:3px solid var(--electric); padding:22px 26px;
+.planet-facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;}
+.planet-fact{
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.52rem;letter-spacing:0.08em;color:var(--steel);
 }
-.info-block-label { font-size:0.51rem; letter-spacing:0.25em; color:var(--electric); text-transform:uppercase; margin-bottom:8px; }
-.info-block-val { font-size:0.7rem; color:var(--white); line-height:1.7; }
-.skills-grid {
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:1px; background:var(--dim); margin-top:44px; border:1px solid var(--dim);
+.solar-note{
+  margin:44px 80px;
+  padding:22px 30px;
+  background:rgba(30,111,255,0.04);
+  border:1px solid rgba(30,111,255,0.2);
+  border-left:3px solid var(--blue);
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.95rem;line-height:1.75;color:var(--silver);
 }
-.skill-item { background:var(--navy-900); padding:18px 20px; display:flex; align-items:center; gap:12px; }
-.skill-dot { width:6px; height:6px; border-radius:50%; background:var(--electric); flex-shrink:0; }
-.skill-name { font-size:0.62rem; letter-spacing:0.1em; color:var(--silver); }
-.connection-banner {
-  margin-top:64px; background:var(--navy-800);
-  border:1px solid var(--dim); border-top:2px solid var(--electric);
-  padding:48px 56px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:48px;
-}
-.conn-item { text-align:center; }
-.conn-icon { font-size:2rem; margin-bottom:12px; }
-.conn-title { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.1em; color:var(--electric); margin-bottom:8px; }
-.conn-desc { font-size:0.6rem; line-height:1.85; color:var(--silver); letter-spacing:0.03em; }
-
-/* ════════════════════ SOLAR SYSTEM ════════════════════ */
-#page-solar { padding:100px 60px; }
-.solar-intro { max-width:600px; margin-bottom:56px; font-size:0.72rem; line-height:2; color:var(--silver); }
-.solar-intro strong { color:var(--white); }
-.planets-grid {
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:2px; background:var(--dim); border:1px solid var(--dim);
-}
-.planet-card {
-  background:var(--navy-900); display:flex; flex-direction:column;
-  transition:background 0.2s; position:relative; overflow:hidden;
-}
-.planet-card:hover { background:var(--navy-800); }
-.planet-card::after {
-  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
-  background:var(--electric);
-  transform:scaleX(0); transform-origin:left; transition:transform 0.3s;
-}
-.planet-card:hover::after { transform:scaleX(1); }
-.planet-render {
-  width:100%; aspect-ratio:1;
-  background:var(--navy-800);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  border-bottom:1px solid var(--dim); position:relative; overflow:hidden;
-  cursor:pointer;
-}
-.planet-render-placeholder { display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center; padding:20px; }
-.planet-orb-css { border-radius:50%; box-shadow:inset -12px -6px 30px rgba(0,0,0,0.7); }
-.planet-render-label { font-family:'JetBrains Mono',monospace; font-size:0.5rem; letter-spacing:0.2em; color:var(--dim); text-transform:uppercase; margin-top:4px; }
-.insert-hint {
-  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-  background:rgba(4,6,15,0.72); opacity:0; transition:opacity 0.2s;
-  font-size:0.58rem; letter-spacing:0.2em; color:var(--electric); text-transform:uppercase;
-  flex-direction:column; gap:8px;
-}
-.planet-card:hover .insert-hint { opacity:1; }
-.planet-render img { width:100%; height:100%; object-fit:contain; display:none; }
-.planet-render img.loaded { display:block; }
-.planet-info { padding:22px 24px; }
-.planet-name { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:0.08em; color:var(--white); margin-bottom:3px; }
-.planet-type { font-family:'JetBrains Mono',monospace; font-size:0.51rem; letter-spacing:0.2em; color:var(--electric); text-transform:uppercase; margin-bottom:12px; }
-.planet-facts { display:grid; grid-template-columns:1fr 1fr; gap:8px 16px; margin-bottom:12px; }
-.planet-fact-label { font-size:0.48rem; letter-spacing:0.18em; color:var(--dim); text-transform:uppercase; margin-bottom:2px; }
-.planet-fact-val { font-size:0.62rem; color:var(--silver); }
-.planet-blender-note { font-size:0.57rem; line-height:1.7; color:var(--electric); font-family:'JetBrains Mono',monospace; letter-spacing:0.04em; margin-top:10px; }
-
-/* ════════════════════ ROTO WEEK PAGES ════════════════════ */
-.page-roto { padding:100px 80px 80px; }
-.roto-header {
-  display:flex; justify-content:space-between; align-items:flex-end;
-  margin-bottom:52px; padding-bottom:36px; border-bottom:1px solid var(--dim);
-  flex-wrap:wrap; gap:20px;
-}
-.roto-week-badge { font-family:'Bebas Neue',sans-serif; font-size:6.5rem; line-height:1; color:var(--navy-700); letter-spacing:0.02em; }
-.roto-week-badge span { color:var(--electric); }
-.roto-nav-area { display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
-.roto-nav-btns { display:flex; gap:8px; }
-.roto-nav-btn {
-  padding:10px 20px; background:var(--navy-800); border:1px solid var(--dim);
-  color:var(--silver); font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase;
-  cursor:pointer; font-family:'Syne',sans-serif;
-  transition:background 0.2s, color 0.2s, border-color 0.2s; border-radius:2px;
-}
-.roto-nav-btn:hover { background:var(--navy-600); color:var(--white); border-color:var(--electric); }
-.roto-nav-btn:disabled { opacity:0.28; cursor:not-allowed; }
-.roto-layout { display:grid; grid-template-columns:1fr 390px; gap:48px; align-items:start; }
-.roto-week-title { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; letter-spacing:0.05em; color:var(--white); margin-bottom:22px; }
-
-/* YouTube */
-.yt-wrap { margin-bottom:28px; }
-.yt-container {
-  width:100%; aspect-ratio:16/9;
-  background:var(--navy-900); border:1px solid var(--dim);
-  position:relative; overflow:hidden; margin-bottom:12px;
-}
-.yt-container iframe { width:100%; height:100%; border:none; display:none; }
-.yt-container iframe.active { display:block; }
-.yt-placeholder {
-  position:absolute; inset:0;
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
-}
-.yt-play-icon {
-  width:64px; height:64px; border-radius:50%;
-  background:rgba(91,138,247,0.1); border:1px solid var(--dim);
-  display:flex; align-items:center; justify-content:center; font-size:1.4rem;
-}
-.yt-placeholder-text { font-family:'JetBrains Mono',monospace; font-size:0.58rem; letter-spacing:0.18em; color:var(--dim); text-align:center; }
-.yt-input-row { display:flex; gap:8px; }
-.yt-input {
-  flex:1; background:var(--navy-900); border:1px solid var(--dim);
-  color:var(--white); padding:10px 14px;
-  font-family:'JetBrains Mono',monospace; font-size:0.6rem; letter-spacing:0.05em;
-  outline:none; border-radius:2px; transition:border-color 0.2s;
-}
-.yt-input::placeholder { color:var(--dim); }
-.yt-input:focus { border-color:var(--electric); }
-.yt-btn {
-  padding:10px 20px; background:var(--electric); color:var(--black);
-  font-family:'Syne',sans-serif; font-size:0.6rem; letter-spacing:0.2em;
-  text-transform:uppercase; font-weight:700; border:none; cursor:pointer; border-radius:2px;
-  white-space:nowrap; transition:background 0.2s;
-}
-.yt-btn:hover { background:var(--ice); }
-
-.roto-desc { font-size:0.72rem; line-height:2; color:var(--silver); margin-bottom:22px; letter-spacing:0.02em; }
-.roto-desc strong { color:var(--white); font-weight:600; }
-.roto-tags { display:flex; flex-wrap:wrap; gap:8px; }
-.roto-tag {
-  font-family:'JetBrains Mono',monospace; font-size:0.51rem; letter-spacing:0.14em;
-  text-transform:uppercase; padding:5px 10px; border:1px solid var(--dim);
-  color:var(--silver); border-radius:2px;
+.solar-note strong{color:var(--white);}
+.solar-note code{
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.8rem;color:var(--cyan);background:rgba(0,200,255,0.07);
+  padding:1px 5px;border-radius:2px;
 }
 
-/* Sidebar */
-.roto-sidebar { display:flex; flex-direction:column; gap:14px; }
-.sidebar-card {
-  background:var(--navy-900); border:1px solid var(--dim);
-  border-top:2px solid var(--electric); padding:24px 22px;
+/* ═══════════════════ WEEK ═══════════════════ */
+#page-week{background:var(--black);}
+.week-top{
+  padding:60px 80px 40px;
+  border-bottom:1px solid var(--dim);
+  display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--navy-900) 0%,var(--black) 100%);
 }
-.sc-label {
-  font-family:'JetBrains Mono',monospace; font-size:0.51rem;
-  letter-spacing:0.25em; color:var(--electric); text-transform:uppercase; margin-bottom:14px;
+.week-top::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(30,111,255,0.05) 0%,transparent 55%);
+  pointer-events:none;
 }
-.progress-bar { height:4px; background:var(--dim); border-radius:2px; overflow:hidden; margin-bottom:7px; }
-.progress-fill { height:100%; background:linear-gradient(to right, var(--blue), var(--electric)); border-radius:2px; }
-.progress-fill.red { background:linear-gradient(to right, var(--rust), var(--accent)); }
-.progress-meta { display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:0.51rem; color:var(--dim); letter-spacing:0.08em; }
-.progress-meta .pct { color:var(--electric); }
-.progress-meta .pct.amber { color:var(--accent); }
-.week-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; }
-.week-grid-btn {
-  aspect-ratio:1; background:var(--navy-800); border:1px solid var(--dim);
-  color:var(--silver); font-family:'Bebas Neue',sans-serif; font-size:1rem;
-  cursor:pointer; border-radius:2px; display:flex; align-items:center; justify-content:center;
-  transition:background 0.15s, color 0.15s, border-color 0.15s;
+.week-lbl{
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.63rem;letter-spacing:0.35em;color:var(--cyan);
+  display:flex;align-items:center;gap:10px;margin-bottom:12px;
 }
-.week-grid-btn:hover { background:var(--navy-600); color:var(--white); border-color:var(--blue); }
-.week-grid-btn.cur { background:var(--electric); color:var(--black); border-color:var(--electric); }
-.week-grid-btn.done { border-color:var(--navy-500); color:var(--navy-400); }
-.timeline-card { background:var(--navy-900); border:1px solid var(--dim); padding:20px 22px; }
-.tl-label { font-family:'JetBrains Mono',monospace; font-size:0.51rem; letter-spacing:0.25em; color:var(--dim); text-transform:uppercase; margin-bottom:14px; }
-.tl-track { display:flex; gap:3px; align-items:flex-end; }
-.tl-seg {
-  flex:1; height:24px; background:var(--dim); border-radius:1px;
-  cursor:pointer; transition:background 0.15s; position:relative;
+.week-lbl::before{content:'';width:22px;height:1px;background:var(--cyan);}
+.week-h1{
+  font-family:'Rajdhani',sans-serif;font-weight:700;
+  font-size:clamp(2rem,5vw,4rem);line-height:1;letter-spacing:0.04em;color:var(--white);
 }
-.tl-seg.done { background:var(--navy-500); }
-.tl-seg.cur  { background:var(--electric); }
-.tl-seg:hover { background:var(--blue); }
-.tl-seg-lbl {
-  position:absolute; bottom:-18px; left:50%; transform:translateX(-50%);
-  font-family:'JetBrains Mono',monospace; font-size:0.4rem; color:var(--dim); white-space:nowrap;
+.week-h1 .acc{
+  background:linear-gradient(135deg,var(--blue-lt),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.tl-seg.done .tl-seg-lbl, .tl-seg.cur .tl-seg-lbl { color:var(--silver); }
-.tl-time {
-  margin-top:26px; font-family:'JetBrains Mono',monospace;
-  font-size:0.54rem; color:var(--silver); letter-spacing:0.08em;
+.week-nav-row{display:flex;gap:8px;padding-bottom:4px;position:relative;z-index:2;}
+.wnav-btn{
+  padding:10px 24px;
+  border:1px solid var(--dim);background:transparent;
+  color:var(--silver);font-size:0.66rem;letter-spacing:0.18em;
+  text-transform:uppercase;font-weight:600;
+  clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+  transition:border-color 0.2s,color 0.2s,background 0.2s;
 }
-.tl-time span { color:var(--electric); }
+.wnav-btn:hover{border-color:var(--blue);color:var(--cyan);background:rgba(30,111,255,0.06);}
+.wnav-btn:disabled{opacity:0.28;cursor:not-allowed;}
 
-/* ── FOOTER ── */
-#site-footer {
-  border-top:1px solid var(--dim); padding:30px 80px;
-  display:flex; justify-content:space-between; align-items:center;
+/* Progress strip */
+.prog-strip{
+  display:grid;grid-template-columns:repeat(12,1fr);
+  height:5px;gap:2px;background:var(--black);
+}
+.prog-seg{background:var(--dim);transition:background 0.3s;}
+.prog-seg.done{background:var(--blue);}
+.prog-seg.cur{
+  background:linear-gradient(90deg,var(--blue),var(--cyan));
+  box-shadow:0 0 8px rgba(0,200,255,0.5);
+}
+
+/* Video + info */
+.week-body{
+  padding:48px 80px;
+  display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:start;
+}
+.vid-wrap{
   background:var(--navy-900);
+  border:1px solid var(--dim);
+  position:relative;
 }
-.footer-brand { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:0.15em; color:var(--electric); }
-.footer-info { font-family:'JetBrains Mono',monospace; font-size:0.51rem; letter-spacing:0.15em; color:var(--dim); }
+.vid-tag{
+  position:absolute;top:0;left:0;z-index:2;
+  background:rgba(0,200,255,0.1);
+  border:1px solid rgba(0,200,255,0.25);
+  border-left:none;border-top:none;
+  padding:4px 12px;
+  font-family:'Share Tech Mono',monospace;font-size:0.5rem;
+  letter-spacing:0.2em;color:var(--cyan);
+}
+.vid-ratio{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;}
+.vid-ratio iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+.vid-ph{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  background:var(--navy-800);
+}
+.play-ring{
+  width:62px;height:62px;border-radius:50%;
+  border:2px solid rgba(0,200,255,0.4);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--cyan);font-size:1.4rem;padding-left:5px;
+}
+.vid-ph p{
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.58rem;letter-spacing:0.18em;color:var(--steel);
+  text-align:center;line-height:1.9;
+}
+.vid-input{display:flex;gap:0;margin-top:0;}
+.vid-input input{
+  flex:1;padding:11px 14px;
+  background:rgba(10,20,40,0.85);border:1px solid var(--dim);
+  border-right:none;color:var(--white);
+  font-family:'Share Tech Mono',monospace;font-size:0.68rem;
+  outline:none;transition:border-color 0.2s;
+}
+.vid-input input:focus{border-color:var(--blue);}
+.vid-input input::placeholder{color:var(--steel);}
+.vid-input button{
+  padding:11px 20px;
+  background:var(--blue);color:var(--white);
+  font-size:0.68rem;letter-spacing:0.14em;font-weight:700;
+  border:1px solid var(--blue);transition:opacity 0.2s;
+}
+.vid-input button:hover{opacity:0.8;}
 
-/* scrollbar */
-::-webkit-scrollbar { width:5px; height:5px; }
-::-webkit-scrollbar-track { background:var(--black); }
-::-webkit-scrollbar-thumb { background:var(--dim); border-radius:3px; }
-::-webkit-scrollbar-thumb:hover { background:var(--blue); }
+/* Week detail cards */
+.week-cards{display:flex;flex-direction:column;gap:20px;}
+.wcard{
+  background:var(--navy-900);border:1px solid var(--dim);
+  border-left:2px solid var(--blue);
+  padding:22px 24px;
+}
+.wcard h4{
+  font-size:0.65rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:11px;font-weight:700;
+}
+.wcard p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;line-height:1.8;color:var(--silver);
+}
+.week-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.wtag{
+  padding:4px 10px;font-size:0.56rem;letter-spacing:0.14em;
+  text-transform:uppercase;font-weight:600;
+  border:1px solid var(--dim);color:var(--silver);
+  background:rgba(10,20,40,0.65);
+}
+
+/* Week all-weeks nav */
+.week-all{padding:36px 80px 60px;border-top:1px solid var(--dim);}
+.week-all h3{
+  font-size:0.66rem;letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--steel);margin-bottom:20px;font-weight:600;
+}
+.week-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;}
+.wg-item{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  cursor:pointer;transition:opacity 0.2s;
+}
+.wg-item:hover{opacity:0.72;}
+.wg-box{
+  width:100%;height:38px;
+  background:var(--navy-700);border:1px solid var(--dim);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--steel);
+  transition:background 0.2s,border-color 0.2s,color 0.2s;
+  clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%);
+}
+.wg-box.done{background:rgba(30,111,255,0.08);border-color:rgba(30,111,255,0.28);color:var(--blue-lt);}
+.wg-box.cur{
+  background:rgba(30,111,255,0.18);border-color:var(--blue);
+  color:var(--cyan);box-shadow:0 0 10px rgba(30,111,255,0.22);
+}
+.wg-lbl{font-size:0.46rem;letter-spacing:0.1em;color:var(--steel);text-align:center;line-height:1.3;}
+
+/* ═══════════════════ FOOTER ═══════════════════ */
+footer{
+  background:var(--navy-900);
+  border-top:1px solid var(--dim);
+  padding:30px 80px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.footer-brand{
+  font-family:'Rajdhani',sans-serif;font-weight:700;
+  font-size:0.95rem;letter-spacing:0.28em;color:var(--cyan);
+}
+.footer-info{
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.56rem;letter-spacing:0.14em;color:var(--steel);text-align:right;
+}
+
+/* ═══════════════════ RESPONSIVE ═══════════════════ */
+@media(max-width:1100px){
+  .planets-grid{grid-template-columns:repeat(2,1fr);}
+  .home-stats{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:900px){
+  #nav{padding:0 24px;}
+  .home-hero,.section-header{padding:60px 32px 44px;}
+  .about-blocks{grid-template-columns:1fr;}
+  .week-body{grid-template-columns:1fr;padding:32px;}
+  .about-course{grid-template-columns:1fr 1fr;margin:32px;}
+  .about-tl,.week-all,.solar-note{padding:40px 32px;}
+  .week-top{padding:40px 32px 32px;}
+  footer{padding:24px 32px;flex-direction:column;gap:12px;text-align:center;}
+}
+@media(max-width:640px){
+  .planets-grid{grid-template-columns:1fr;}
+  .week-top{grid-template-columns:1fr;}
+  .week-grid{grid-template-columns:repeat(6,1fr);}
+  .home-stats .stat-item{padding:24px 20px;}
+  .about-course{grid-template-columns:1fr;margin:24px;}
+}
 </style>
 </head>
 <body>
+<div class="stars"></div>
 
-<!-- ══════ NAVBAR ══════ -->
-<nav id="navbar">
-  <div class="nav-logo" onclick="goPage('home')">ROTO<span>.</span>SCOPE</div>
-  <ul class="nav-links">
-    <li><a onclick="goPage('home')" id="nav-home" class="active">Home</a></li>
-    <li><a onclick="goPage('about')" id="nav-about">About</a></li>
-    <li><a onclick="goPage('solar')" id="nav-solar">3D Solar System</a></li>
-    <li>
-      <a class="nav-dropdown-btn" id="nav-roto">Rotoscoping</a>
-      <ul class="nav-dropdown" id="roto-dd"></ul>
+<!-- ══════════ NAV ══════════ -->
+<nav id="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    ROTO<span class="lo-white">SCOPE</span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#" class="active" data-page="home" onclick="return goPage('home')">Home</a></li>
+    <li><a href="#" data-page="about" onclick="return goPage('about')">About</a></li>
+    <li><a href="#" data-page="solar" onclick="return goPage('solar')">3D Solar System</a></li>
+    <li style="position:relative;">
+      <button id="rotoBtn" onclick="toggleDD()">Rotoscoping ▾</button>
+      <ul class="nav-dropdown" id="rotoDD"></ul>
     </li>
   </ul>
 </nav>
 
-<!-- ══════════════════════════════════
-     HOME
-══════════════════════════════════ -->
+<!-- ══════════ HOME ══════════ -->
 <div class="page active" id="page-home">
-  <div class="stars" id="starfield"></div>
-  <div class="home-glow"></div>
-  <div class="home-glow2"></div>
-
-  <div class="hero-wrap">
-    <p class="hero-eyebrow">MMA Portfolio — Animation &amp; Motion Arts</p>
-    <h1 class="hero-title">
-      ROTO<span class="hl">SCOPING</span><span class="outline">JOURNAL</span>
+  <div class="home-hero">
+    <div class="home-glow home-glow-1"></div>
+    <div class="home-glow home-glow-2"></div>
+    <p class="home-eyebrow fi fi1">MMA Portfolio — Animation Studies</p>
+    <h1 class="home-title">
+      <span class="line1 fi fi2">Frame by</span>
+      <span class="line2 fi fi3">Frame.</span>
     </h1>
-    <p class="hero-desc">
-      A <strong>12-week documentary</strong> of rotoscoping practice — tracing motion frame by frame, building on a 3D solar system rendered in Blender. Part of the <strong>Multimedia and Authoring</strong> course where 3D modelling and classical animation technique collide.
-    </p>
-    <div class="hero-ctas">
-      <button class="btn-primary" onclick="goPage('roto-1')">Start Week 1 →</button>
-      <button class="btn-outline" onclick="goPage('solar')">3D Solar System</button>
+    <p class="home-sub fi fi4">A 12-week rotoscoping journey — tracing motion, light, and form through hand-crafted animation and 3D solar system exploration in Blender.</p>
+    <div class="home-btns fi fi5">
+      <button class="btn-primary" onclick="goPage('solar')">View 3D Planets</button>
+      <button class="btn-secondary" onclick="goPage('week',1)">See Week Progress</button>
     </div>
   </div>
-
-  <div class="scroll-hint">
-    <div class="scroll-bar"></div>
-    <span>Explore</span>
+  <div class="home-stats">
+    <div class="stat-item fi fi2"><div class="stat-num">12</div><div class="stat-label">Weeks of Work</div></div>
+    <div class="stat-item fi fi3"><div class="stat-num">60s</div><div class="stat-label">Total Animation</div></div>
+    <div class="stat-item fi fi4"><div class="stat-num">8</div><div class="stat-label">Planets Rendered</div></div>
+    <div class="stat-item fi fi5"><div class="stat-num">24</div><div class="stat-label">Frames / Second</div></div>
   </div>
-
-  <div class="home-cards">
-    <div class="home-card" onclick="goPage('about')">
-      <div class="hc-num">01</div>
-      <div class="hc-title">About the Course</div>
-      <div class="hc-body">MMA — Multimedia and Authoring. How rotoscoping connects to 3D rendering, digital compositing, and real-world animation pipelines.</div>
-    </div>
-    <div class="home-card" onclick="goPage('solar')">
-      <div class="hc-num">02</div>
-      <div class="hc-title">3D Solar System</div>
-      <div class="hc-body">Each planet modelled and rendered in Blender. Drop in your own renders — used as background and lighting reference in compositing.</div>
-    </div>
-    <div class="home-card" onclick="goPage('roto-1')">
-      <div class="hc-num">03</div>
-      <div class="hc-title">12 Weeks Progress</div>
-      <div class="hc-body">5 seconds per week. 60 seconds total. A growing rotoscoped short film, one week at a time. Embed your YouTube video each week.</div>
-    </div>
-  </div>
+  <footer>
+    <div class="footer-brand">ROTOSCOPE</div>
+    <div class="footer-info">MMA COURSE — GITHUB PAGES<br>© 2024 ALL RIGHTS RESERVED</div>
+  </footer>
 </div>
 
-<!-- ══════════════════════════════════
-     ABOUT
-══════════════════════════════════ -->
+<!-- ══════════ ABOUT ══════════ -->
 <div class="page" id="page-about">
-  <div style="padding:100px 80px;">
-    <div class="page-eyebrow">002 — About</div>
-    <h2 class="page-title">Multimedia<br><span>Authoring Course</span></h2>
-
-    <div class="about-layout">
-      <div class="about-body">
-        <div class="about-section-label">The Course</div>
-        <p><strong>Multimedia and Authoring (MMA)</strong> is a studio-based course exploring the intersection of traditional animation, digital 3D production, and motion design. Students develop skills across software, craft, and creative research.</p>
-        <p>The course is structured around a semester-long project: each student selects a short film sequence and <em>rotoscopes</em> it — tracing movement and form frame by frame — while simultaneously building a library of 3D assets that inform and enrich the animation work.</p>
-        <p>The connection between <strong>3D modelling</strong> and <strong>rotoscoping</strong> is intentional. Blender renders of the solar system serve as lighting references, background environments, and structural guides for the traced animation layers.</p>
-        <p>By Week 12, each student has produced a <strong>60-second rotoscoped sequence</strong> — 5 seconds contributed per week — combining hand-traced frames with 3D-rendered environments and professional sound design.</p>
-
-        <div class="skills-grid">
-          <div class="skill-item"><div class="skill-dot"></div><div class="skill-name">Adobe After Effects</div></div>
-          <div class="skill-item"><div class="skill-dot"></div><div class="skill-name">Blender 3D</div></div>
-          <div class="skill-item"><div class="skill-dot"></div><div class="skill-name">Procreate / Photoshop</div></div>
-          <div class="skill-item"><div class="skill-dot"></div><div class="skill-name">DaVinci Resolve</div></div>
-          <div class="skill-item"><div class="skill-dot"></div><div class="skill-name">Frame Extraction (Python)</div></div>
-          <div class="skill-item"><div class="skill-dot"></div><div class="skill-name">Compositing & Colour</div></div>
-        </div>
-      </div>
-
-      <div class="about-aside">
-        <div class="info-block">
-          <div class="info-block-label">Course</div>
-          <div class="info-block-val">Multimedia and Authoring (MMA)<br>Bachelor of Fine Arts</div>
-        </div>
-        <div class="info-block">
-          <div class="info-block-label">Duration</div>
-          <div class="info-block-val">12 Weeks · 1 Semester</div>
-        </div>
-        <div class="info-block">
-          <div class="info-block-label">Final Output</div>
-          <div class="info-block-val">60-second rotoscoped film<br>5 seconds × 12 weeks</div>
-        </div>
-        <div class="info-block">
-          <div class="info-block-label">3D Component</div>
-          <div class="info-block-val">Solar system rendered in Blender — used as lighting and environment reference throughout compositing.</div>
-        </div>
-        <div class="info-block">
-          <div class="info-block-label">Frame Rate</div>
-          <div class="info-block-val">30 fps · ~150 frames per week</div>
-        </div>
-      </div>
+  <div class="section-header">
+    <div class="bg-text">MMA</div>
+    <p class="page-eyebrow fi fi1">001 — About</p>
+    <h1 class="page-title fi fi2">Multimedia Arts <span class="acc">&amp; Animation</span></h1>
+    <p class="page-lead fi fi3">Where traditional animation technique meets cutting-edge 3D technology — exploring rotoscoping as the bridge between live-action reference and animated expression.</p>
+  </div>
+  <div class="about-blocks">
+    <div class="about-block fi fi1">
+      <span class="about-icon">🎓</span>
+      <h3>The MMA Course</h3>
+      <p>The <strong>Multimedia Arts (MMA)</strong> program bridges creative disciplines — blending motion design, 3D modeling, compositing, and traditional animation into a unified practice.</p>
+      <p>Students engage with both historical techniques and modern pipelines, using industry tools like <strong>Blender, After Effects,</strong> and <strong>Procreate</strong> to bring concepts to life.</p>
     </div>
-
-    <div class="connection-banner">
-      <div class="conn-item">
-        <div class="conn-icon">🎬</div>
-        <div class="conn-title">Rotoscoping</div>
-        <div class="conn-desc">Tracing live-action footage frame by frame to create realistic motion in animation. Each week adds 5 seconds to the growing sequence.</div>
-      </div>
-      <div class="conn-item">
-        <div class="conn-icon">🪐</div>
-        <div class="conn-title">3D Modelling</div>
-        <div class="conn-desc">Every planet in the solar system modelled and rendered in Blender. Used as background composites and lighting reference for the animation layers.</div>
-      </div>
-      <div class="conn-item">
-        <div class="conn-icon">✦</div>
-        <div class="conn-title">Compositing</div>
-        <div class="conn-desc">After Effects brings both together — traced animation over 3D environments, with matched lighting, colour grading, and sound design.</div>
-      </div>
+    <div class="about-block fi fi2">
+      <span class="about-icon">✏️</span>
+      <h3>What is Rotoscoping?</h3>
+      <p>Rotoscoping is the frame-by-frame tracing of live-action footage to produce realistic, fluid animation. First patented by <strong>Max Fleischer in 1917</strong>, it remains one of the most nuanced crafts in animation.</p>
+      <p>By studying real movement through rotoscoping, animators develop a <strong>deep understanding of weight, timing, and motion</strong> that elevates all their work.</p>
+    </div>
+    <div class="about-block fi fi3">
+      <span class="about-icon">🪐</span>
+      <h3>The 3D Connection</h3>
+      <p>3D rendering in <strong>Blender</strong> runs alongside rotoscoping in this course. The solar system project challenges students to master lighting, texturing, and shading — skills that directly inform rotoscoped compositing.</p>
+      <p>Rendered planets serve as <strong>dynamic backgrounds and lighting references</strong> for the rotoscoped sequences.</p>
+    </div>
+    <div class="about-block fi fi4">
+      <span class="about-icon">📽️</span>
+      <h3>The 60-Second Film</h3>
+      <p>Over 12 weeks, each student builds a <strong>60-second rotoscoped animation</strong> — 5 seconds of new animation produced each week. The cumulative project is the capstone of the semester.</p>
+      <p>Weekly progress is documented here, showing the evolution from first frame to final composite — a living record of <strong>craft in progress.</strong></p>
     </div>
   </div>
+  <div class="about-course fi fi2">
+    <div><div class="cd-label">Course</div><div class="cd-val">Multimedia Arts</div></div>
+    <div><div class="cd-label">Duration</div><div class="cd-val">12 Weeks / 1 Semester</div></div>
+    <div><div class="cd-label">Final Output</div><div class="cd-val">60-Second Animation</div></div>
+    <div><div class="cd-label">Tools</div><div class="cd-val">Blender · After Effects · Procreate</div></div>
+    <div><div class="cd-label">Frame Rate</div><div class="cd-val">24 Frames Per Second</div></div>
+    <div><div class="cd-label">Per Week</div><div class="cd-val">5 Seconds of Animation</div></div>
+  </div>
+  <div class="about-tl fi fi2">
+    <h2>Semester Arc</h2>
+    <div class="tl-wrap">
+      <div class="tl-row"><div class="tl-wk">WK 01–03</div><div class="tl-txt"><strong>Foundations.</strong> Introduction to rotoscoping, workspace setup, frame extraction, and basic line tracing over still and moving reference.</div></div>
+      <div class="tl-row"><div class="tl-wk">WK 04–06</div><div class="tl-txt"><strong>Form &amp; Light.</strong> Line quality studies, colour passes, shadow mapping, and introduction to 3D solar system modeling in Blender.</div></div>
+      <div class="tl-row"><div class="tl-wk">WK 07–09</div><div class="tl-txt"><strong>Hybrid Work.</strong> Compositing rotoscoped figures over 3D renders. Motion blur, smear frames, and atmospheric FX layers.</div></div>
+      <div class="tl-row"><div class="tl-wk">WK 10–12</div><div class="tl-txt"><strong>Final Composite.</strong> Sound sync, multi-layer compositing, 4K export, and final review. The complete 60-second film is assembled and submitted.</div></div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-brand">ROTOSCOPE</div>
+    <div class="footer-info">MMA COURSE — GITHUB PAGES<br>© 2024 ALL RIGHTS RESERVED</div>
+  </footer>
 </div>
 
-<!-- ══════════════════════════════════
-     SOLAR SYSTEM
-══════════════════════════════════ -->
+<!-- ══════════ SOLAR ══════════ -->
 <div class="page" id="page-solar">
-  <div style="padding:100px 60px;">
-    <div class="page-eyebrow">003 — 3D Work</div>
-    <h2 class="page-title">Solar System<br><span>Blender Renders</span></h2>
-    <p class="solar-intro">Each card holds a slot for your <strong>Blender render</strong> of that planet. The CSS orb shows while no render is loaded — <strong>drag and drop an image</strong> onto any card to replace it with your render. Cards are arranged in orbital order.</p>
-    <div class="planets-grid" id="planetsGrid"></div>
+  <div class="section-header">
+    <p class="page-eyebrow fi fi1">002 — 3D Work</p>
+    <h1 class="page-title fi fi2">The Solar <span class="acc">System</span></h1>
+    <p class="page-lead fi fi3">Eight planets rendered in Blender. Each card is ready for your exported render — replace the placeholder with your image file to display your work.</p>
   </div>
+  <div class="planets-grid" id="planetsGrid"></div>
+  <div class="solar-note fi fi2">
+    <strong>How to add your Blender renders:</strong> Export each planet as PNG or JPG from Blender. In the HTML, locate the planet card by ID and add an <code>&lt;img&gt;</code> tag inside <code>.planet-render</code> pointing to your file path (e.g. <code>renders/earth.png</code>). The card layout adapts automatically.
+  </div>
+  <footer>
+    <div class="footer-brand">ROTOSCOPE</div>
+    <div class="footer-info">MMA COURSE — GITHUB PAGES<br>© 2024 ALL RIGHTS RESERVED</div>
+  </footer>
 </div>
 
-<!-- ══════════════════════════════════
-     ROTO WEEK PAGES
-══════════════════════════════════ -->
-<div id="roto-pages"></div>
-
-<!-- ══════ FOOTER ══════ -->
-<footer id="site-footer">
-  <div class="footer-brand">ROTOSCOPE</div>
-  <div class="footer-info">MMA PORTFOLIO · 12 WEEKS · 60 SECONDS · 30 FPS</div>
-</footer>
+<!-- ══════════ WEEK ══════════ -->
+<div class="page" id="page-week">
+  <div class="week-top">
+    <div>
+      <div class="week-lbl" id="wkLabel">Week 01</div>
+      <h1 class="week-h1" id="wkTitle">Introduction to <span class="acc">Rotoscoping</span></h1>
+    </div>
+    <div class="week-nav-row">
+      <button class="wnav-btn" id="prevBtn" onclick="shiftWeek(-1)">◀ Prev</button>
+      <button class="wnav-btn" id="nextBtn" onclick="shiftWeek(1)">Next ▶</button>
+    </div>
+  </div>
+  <div class="prog-strip" id="progStrip"></div>
+  <div class="week-body">
+    <div>
+      <div class="vid-wrap">
+        <div class="vid-tag">VIDEO</div>
+        <div class="vid-ratio" id="vidArea">
+          <div class="vid-ph" id="vidPh">
+            <div class="play-ring">▶</div>
+            <p>PASTE A YOUTUBE LINK BELOW<br>TO EMBED YOUR PROGRESS VIDEO</p>
+          </div>
+        </div>
+      </div>
+      <div class="vid-input">
+        <input type="text" id="ytInput" placeholder="https://www.youtube.com/watch?v=..." />
+        <button onclick="doEmbed()">EMBED</button>
+      </div>
+    </div>
+    <div class="week-cards" id="wkCards"></div>
+  </div>
+  <div class="week-all">
+    <h3>All 12 Weeks</h3>
+    <div class="week-grid" id="wkGrid"></div>
+  </div>
+  <footer>
+    <div class="footer-brand">ROTOSCOPE</div>
+    <div class="footer-info">MMA COURSE — GITHUB PAGES<br>© 2024 ALL RIGHTS RESERVED</div>
+  </footer>
+</div>
 
 <script>
-/* ═══ DATA ═══════════════════════════════════ */
-const PLANETS = [
-  { name:'Mercury', type:'Terrestrial', order:1, diameter:'4,879 km', distance:'0.39 AU', moons:'0', temp:'167°C',
-    c:'#8a7a6a', s:'#3a2a1a', g:'#c0a080',
-    desc:'Closest to the Sun. Heavily cratered, extreme temperature swings, no atmosphere.',
-    note:'Crater depth maps and high-contrast surface texturing.' },
-  { name:'Venus', type:'Terrestrial', order:2, diameter:'12,104 km', distance:'0.72 AU', moons:'0', temp:'464°C',
-    c:'#c8a050', s:'#7a5010', g:'#f0c870',
-    desc:'Hottest planet. Dense CO₂ atmosphere, global volcanic surface, shrouded in thick clouds.',
-    note:'Volumetric cloud shader with warm atmospheric scattering.' },
-  { name:'Earth', type:'Terrestrial', order:3, diameter:'12,742 km', distance:'1.00 AU', moons:'1', temp:'15°C',
-    c:'#2060c0', s:'#0a3060', g:'#4090f0',
-    desc:'Our home. Blue oceans, white clouds, green continents — the only confirmed habitable world.',
-    note:'Ocean shader, cloud layer, atmosphere rim glow, city lights.' },
-  { name:'Mars', type:'Terrestrial', order:4, diameter:'6,779 km', distance:'1.52 AU', moons:'2', temp:'-65°C',
-    c:'#c04020', s:'#601800', g:'#e06040',
-    desc:'The Red Planet. Iron oxide soil, polar ice caps, Olympus Mons — tallest volcano in the solar system.',
-    note:'Rusty oxide texture, dust storm particles, Olympus Mons topology.' },
-  { name:'Jupiter', type:'Gas Giant', order:5, diameter:'139,820 km', distance:'5.20 AU', moons:'95', temp:'-110°C',
-    c:'#c09060', s:'#6a4820', g:'#e0b080',
-    desc:'Largest planet. The Great Red Spot — a storm wider than Earth — has raged for centuries.',
-    note:'Procedural band shader, Great Red Spot, dynamic cloud turbulence.' },
-  { name:'Saturn', type:'Gas Giant', order:6, diameter:'116,460 km', distance:'9.58 AU', moons:'146', temp:'-140°C',
-    c:'#d0b870', s:'#806030', g:'#f0d890',
-    desc:'Iconic ring system of ice and rock. So low density it would float in water.',
-    note:'Ring geometry with particle transparency and shadow casting.' },
-  { name:'Uranus', type:'Ice Giant', order:7, diameter:'50,724 km', distance:'19.22 AU', moons:'28', temp:'-195°C',
-    c:'#70c8d8', s:'#204858', g:'#a0e8f0',
-    desc:'Rotates on its side. Pale blue-green methane atmosphere, faint ring system.',
-    note:'Methane ice shader, tilted axis rings, subsurface scattering.' },
-  { name:'Neptune', type:'Ice Giant', order:8, diameter:'49,244 km', distance:'30.05 AU', moons:'16', temp:'-200°C',
-    c:'#2850c8', s:'#081840', g:'#4878f8',
-    desc:'Fastest winds in the solar system — up to 2,100 km/h. Deep blue methane storms.',
-    note:'Deep navy volumetrics, storm vortex detail, faint ring arcs.' },
+/* ── DATA ── */
+const WEEKS=[
+  {t:"Introduction to Rotoscoping",s:"Setup & First Frames",d:"Set up the workspace and extracted first frames from reference footage. Practiced basic line tracing over still images to understand weight and proportion. First 5 seconds of animation begins here — slow, deliberate strokes on simple movement reference.",tags:["Setup","Line Tracing","After Effects","Frame Extraction"],focus:"Body — Static Pose",time:"0:00 – 0:05"},
+  {t:"Workflow & Frame Extraction",s:"Pipeline & First Sequence",d:"Built a Python script to batch-export frames at 24fps. Established naming conventions and folder structures. Completed first full traced sequence: a 2-second hand movement, then extended to the full 5-second walking reference clip.",tags:["Python","Pipeline","Walking Cycle","Hands"],focus:"Feet & Lower Body",time:"0:05 – 0:10"},
+  {t:"Tracing Body Motion",s:"Full Body Dynamics",d:"Moved from isolated limbs to full body movement. Studied the spine as the root of all motion. Discovered tracing on 2s (every other frame) maintains fluidity without overworking. Week's 5-second clip features a dramatic full-body turn.",tags:["Body Mechanics","Timing","Spine","2s Tracing"],focus:"Full Body Turn",time:"0:10 – 0:15"},
+  {t:"Line Quality & Weight",s:"Expressive Linework",d:"Focused on varying line weight to communicate depth and structure. Heavy lines for silhouette, thin lines for interior detail. Experimented with tapered brush settings in Procreate. Week's 5 seconds captures dramatic side-lit movement.",tags:["Line Art","Procreate","Depth","Brush Settings"],focus:"Silhouette Study",time:"0:15 – 0:20"},
+  {t:"Facial Animation",s:"Expression & Lip Sync",d:"Tackled the hardest subject — the face. Traced a talking sequence, focusing on lip sync and eye movement. Learned to simplify without losing expressiveness. Week's 5 seconds: a character reacting emotionally to something off-screen.",tags:["Facial","Lip Sync","Expression","Simplification"],focus:"Head & Face",time:"0:20 – 0:25"},
+  {t:"Colour & Tone Pass",s:"Painting Light",d:"Added colour underneath line art for the first time. Built a limited 5-colour palette per scene. Studied how shadow placement defines form and communicates the light source direction. 5-second clip adds colour to all prior linework.",tags:["Colour","Shadow","Palette","Flat Fills"],focus:"Colour Study",time:"0:25 – 0:30"},
+  {t:"3D Reference Integration",s:"Blender + Rotoscope Hybrid",d:"Cross-referenced rotoscoped lines with 3D planet renders from Blender. The rendered planets serve as atmospheric backgrounds and lighting guides behind the traced figures. Week 7 marks the midpoint composite test.",tags:["Blender","Composite","Hybrid","Lighting Ref"],focus:"Composite Test",time:"0:30 – 0:35"},
+  {t:"Motion Blur & Speed Lines",s:"Fast Action Sequences",d:"Manually painted motion blur on fast-moving frames. Studied smear frames — the animation trick where one exaggerated in-between replaces 3–4 normal frames to convey speed. Week's 5 seconds: a running-then-stopping sequence.",tags:["Motion Blur","Smear Frames","Speed","Action"],focus:"Fast Movement",time:"0:35 – 0:40"},
+  {t:"Atmospheric FX Layers",s:"Depth & Environment",d:"Added particle effects, dust motes, and atmospheric haze using After Effects. Used adjustment layers and blend modes to integrate FX without overpowering the line art. Week's environment: a dusty windswept outdoor scene.",tags:["FX","Particles","Atmosphere","After Effects"],focus:"Environment",time:"0:40 – 0:45"},
+  {t:"Sound & Timing Sync",s:"Audio-Driven Animation",d:"Synced the animation to a custom sound design track. Used audio waveform markers to hit key poses exactly on beat. Discovered how sound completes a visually rough moment. Week 10 clip is timed to a 5-second percussive hit.",tags:["Sound Design","Timing","Sync","Keyframes"],focus:"Sound Sync",time:"0:45 – 0:50"},
+  {t:"Multi-Layer Compositing",s:"Assembly & Integration",d:"Combined all elements into a single timeline: reference video, traced line art, colour fills, FX, 3D background planets, and sound. Managed 34 separate layers across the expanding 55-second sequence. Week 11 is the full rough cut.",tags:["Compositing","Multi-layer","Rough Cut","Assembly"],focus:"Full Composite",time:"0:50 – 0:55"},
+  {t:"Final Output & Review",s:"Export & Reflection",d:"Rendered the final piece at 4K/24fps. Reviewed the full 12-week journey, compiled a before/after comparison, and documented lessons learned. Week 12 closes the 60-second film — every frame, every layer, every decision unified.",tags:["Final Render","4K","Export","Review","60sec"],focus:"Complete Film",time:"0:55 – 1:00"}
 ];
 
-const WEEKS = [
-  { title:'Introduction & Setup', tags:['Workspace','Frame Extraction','First Traces'],
-    desc:'Established the workspace in After Effects and Procreate. Extracted frames from reference footage at 30fps using a Python script. Practiced basic line tracing over still frames to understand figure weight and proportion. First traced sequence: a simple arm raise — <strong>30 frames</strong>.' },
-  { title:'Workflow & Pipeline', tags:['Pipeline','Batch Export','Folder Structure'],
-    desc:'Built a repeatable pipeline for batch frame export and import. Established naming conventions and folder architecture to scale across 12 weeks. Traced a 5-second hand and wrist movement. Began understanding how to simplify anatomy while keeping gesture readable.' },
-  { title:'Body Mechanics', tags:['Full Body','Spine Root','Walking Cycle'],
-    desc:'Moved beyond isolated limb tracing to full body movement. Studied the <strong>spine as the root of all motion</strong>. Discovered tracing on 2s (every other frame) — maintains fluidity at half the workload. Completed a full walking cycle trace.' },
-  { title:'Line Quality & Weight', tags:['Line Art','Tapered Brush','Depth'],
-    desc:'Focused entirely on line quality. Varied line weight to communicate depth, structure, and silhouette. Heavy confident lines for outer contours, delicate lines for interior form. Significant improvement in the final traced look.' },
-  { title:'Facial Animation', tags:['Lip Sync','Eyes','Expression'],
-    desc:'The most complex subject: the face. Traced a 5-second talking sequence. Learned that facial animation requires massive simplification. Focused on <strong>clear lip shapes and honest eye movement</strong>. The "lie of animation" — what reads as true is rarely anatomically exact.' },
-  { title:'Colour & Tone', tags:['Colour Fill','Shadow','Palette'],
-    desc:'Added flat colour beneath the line art for the first time. Built a restricted <strong>6-colour palette</strong> per scene. Shadow placement as a storytelling tool — where light falls tells us everything about form and mood. The sequence now reads as animation rather than just line drawings.' },
-  { title:'3D Reference Integration', tags:['Blender','Composite','Hybrid'],
-    desc:'Brought the Blender solar system renders into the composition as background layers. Used planet renders as lighting reference and atmospheric backdrop. Cross-referenced rotoscoped figures against 3D environments to match <strong>light direction and colour temperature</strong>.' },
-  { title:'Motion Blur & Smear Frames', tags:['Motion Blur','Smear Frames','Speed'],
-    desc:'Studied motion blur and smear frames — the animation technique where one exaggerated in-between replaces 3–4 normal frames to convey extreme speed. Manually painted motion blur on fast-moving limbs. The sequence now has genuine <strong>kinetic energy</strong>.' },
-  { title:'Atmosphere & FX Layers', tags:['Particles','After Effects','Blend Modes'],
-    desc:'Added atmospheric FX layers: dust motes, subtle lens flares, and vignette. Used After Effects adjustment layers and blend modes to integrate FX without overpowering the line art. <strong>The scene now breathes.</strong> Every frame has air in it.' },
-  { title:'Sound & Timing Sync', tags:['Sound Design','Markers','Beat Sync'],
-    desc:'Synced the animation to a custom sound design track. Used audio waveform markers in After Effects to hit key poses exactly on beat. Discovered how sound retroactively <strong>fixes animation</strong> — a slightly off pose reads perfectly when the sound hits at the right moment.' },
-  { title:'Multi-Layer Compositing', tags:['Compositing','34 Layers','30 Seconds'],
-    desc:'Combined all elements: reference video, traced line art, colour fills, FX layers, 3D planet backgrounds, and sound. Managed <strong>34 individual layers</strong> across a 30-second sequence. Learned crucial layer management habits that carry into professional work.' },
-  { title:'Final Output & Review', tags:['Final Render','4K','60 Seconds','Export'],
-    desc:'Rendered the complete <strong>60-second sequence</strong> at 4K / 30fps. Compiled a before/after comparison showing raw reference footage alongside the finished rotoscoped animation. Documented lessons learned across all 12 weeks. Exported for GitHub Pages and Vimeo.' },
+const PLANETS=[
+  {n:"Mercury",t:"Terrestrial Planet",d:"Closest to the Sun. Extreme temperature swings and dense cratered surface. Rendered with high-contrast lighting and detailed rock texture displacement maps.",f:["0.39 AU","∅ 4,879 km","0 Moons"],o:"orb-mercury"},
+  {n:"Venus",t:"Terrestrial Planet",d:"Thick CO₂ atmosphere with crushing pressure. Rendered with volumetric cloud layers and sickly amber glow diffusing through dense atmospheric haze.",f:["0.72 AU","∅ 12,104 km","0 Moons"],o:"orb-venus"},
+  {n:"Earth",t:"Terrestrial Planet",d:"Our home. Blue oceans, white cloud systems, green landmasses. Rendered with Blender's atmosphere shader, ocean material, and procedural cloud coverage.",f:["1.00 AU","∅ 12,756 km","1 Moon"],o:"orb-earth"},
+  {n:"Mars",t:"Terrestrial Planet",d:"The Red Planet. Iron-rich rust surface, polar ice caps, and Olympus Mons — the tallest volcano in the solar system. Rendered with erosion-based surface textures.",f:["1.52 AU","∅ 6,792 km","2 Moons"],o:"orb-mars"},
+  {n:"Jupiter",t:"Gas Giant",d:"Largest planet in the solar system. Rendered with procedural band generation, the Great Red Spot vortex, and soft warm glow from internal heat emission.",f:["5.20 AU","∅ 142,984 km","95 Moons"],o:"orb-jupiter"},
+  {n:"Saturn",t:"Gas Giant",d:"The ringed jewel. Ring system rendered with geometry transparency, shadow casting on the gas surface, and subsurface scattering through the cloud layers.",f:["9.58 AU","∅ 120,536 km","146 Moons"],o:"orb-saturn",rings:true},
+  {n:"Uranus",t:"Ice Giant",d:"Pale blue-green methane atmosphere. Unusual axial tilt of 98° makes it unique — rendered with subtle banding and a delicate, thin ring plane.",f:["19.2 AU","∅ 51,118 km","28 Moons"],o:"orb-uranus"},
+  {n:"Neptune",t:"Ice Giant",d:"Deep blue methane giant with the fastest winds in the solar system. Rendered with dynamic cloud streaks and deep volumetric atmospheric scattering.",f:["30.1 AU","∅ 49,528 km","16 Moons"],o:"orb-neptune"}
 ];
 
-/* ═══ STARS ═════════════════════════════════ */
+/* ── STATE ── */
+let curWeek=1;
+const vidURLs={};
+
+/* ── ROUTING ── */
+function goPage(p,w){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-links a,.nav-links button').forEach(x=>x.classList.remove('active'));
+  if(p==='week'){
+    document.getElementById('page-week').classList.add('active');
+    document.getElementById('rotoBtn').classList.add('active');
+    loadWeek(w||curWeek);
+  }else{
+    document.getElementById('page-'+p).classList.add('active');
+    const lnk=document.querySelector(`.nav-links a[data-page="${p}"]`);
+    if(lnk)lnk.classList.add('active');
+  }
+  window.scrollTo({top:0,behavior:'instant'});
+  // re-trigger animations
+  document.querySelectorAll('.page.active .fi').forEach(el=>{
+    el.style.animation='none';
+    void el.offsetHeight;
+    el.style.animation='';
+  });
+  closeDD();
+  return false;
+}
+
+/* ── DROPDOWN ── */
+function toggleDD(){document.getElementById('rotoDD').classList.toggle('open');}
+function closeDD(){document.getElementById('rotoDD').classList.remove('open');}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#rotoBtn')&&!e.target.closest('#rotoDD'))closeDD();
+});
+
+/* ── BUILD DROPDOWN ── */
 (function(){
-  const c = document.getElementById('starfield');
-  for(let i=0;i<180;i++){
-    const s=document.createElement('div'); s.className='star';
-    const sz=Math.random()*2+0.4;
-    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--max:${0.2+Math.random()*0.8};animation-delay:${Math.random()*4}s;`;
-    c.appendChild(s);
+  const dd=document.getElementById('rotoDD');
+  WEEKS.forEach((w,i)=>{
+    const li=document.createElement('li');
+    li.innerHTML=`<a href="#" onclick="return goPage('week',${i+1})"><span class="wk-num">W${String(i+1).padStart(2,'0')}</span>${w.t}</a>`;
+    dd.appendChild(li);
+  });
+})();
+
+/* ── BUILD PLANETS ── */
+(function(){
+  const g=document.getElementById('planetsGrid');
+  PLANETS.forEach(p=>{
+    const c=document.createElement('div');
+    c.className='planet-card fi';
+    const orbInner=p.rings
+      ?`<div class="saturn-wrap"><div class="orb ${p.o}"></div></div>`
+      :`<div class="orb ${p.o}"></div>`;
+    c.innerHTML=`
+      <div class="planet-render">
+        <div class="ph">${orbInner}<span class="ph-label">Insert Blender Render</span></div>
+        <div class="blender-tag">Blender</div>
+      </div>
+      <div class="planet-info">
+        <div class="planet-name">${p.n}</div>
+        <div class="planet-type">${p.t}</div>
+        <div class="planet-desc">${p.d}</div>
+        <div class="planet-facts">${p.f.map(x=>`<div class="planet-fact">${x}</div>`).join('')}</div>
+      </div>`;
+    g.appendChild(c);
+  });
+})();
+
+/* ── BUILD PROGRESS STRIP ── */
+(function(){
+  const s=document.getElementById('progStrip');
+  for(let i=1;i<=12;i++){
+    const d=document.createElement('div');
+    d.className='prog-seg';d.id='ps'+i;s.appendChild(d);
   }
 })();
 
-/* ═══ DROPDOWN ══════════════════════════════ */
-const dd = document.getElementById('roto-dd');
-WEEKS.forEach((w,i)=>{
-  const li=document.createElement('li');
-  li.innerHTML=`<a onclick="goPage('roto-${i+1}')"><span class="wk">W${String(i+1).padStart(2,'0')}</span>${w.title}</a>`;
-  dd.appendChild(li);
-});
-
-/* ═══ PLANETS GRID ══════════════════════════ */
-const grid = document.getElementById('planetsGrid');
-PLANETS.forEach(p=>{
-  const card=document.createElement('div'); card.className='planet-card';
-  card.innerHTML=`
-    <div class="planet-render" id="r-${p.name}">
-      <div class="planet-render-placeholder">
-        <div class="planet-orb-css" style="width:115px;height:115px;background:radial-gradient(circle at 35% 30%,${p.g},${p.c} 45%,${p.s});box-shadow:inset -14px -7px 35px rgba(0,0,0,0.8),0 0 50px ${p.g}22;"></div>
-        <div class="planet-render-label">Drop Blender render here</div>
-      </div>
-      <img src="" alt="${p.name}" />
-      <div class="insert-hint"><span>📁</span>Drop image to insert render</div>
-    </div>
-    <div class="planet-info">
-      <div class="planet-name">${p.name}</div>
-      <div class="planet-type">${p.type} · Planet ${p.order}</div>
-      <div class="planet-facts">
-        <div><div class="planet-fact-label">Diameter</div><div class="planet-fact-val">${p.diameter}</div></div>
-        <div><div class="planet-fact-label">Distance</div><div class="planet-fact-val">${p.distance}</div></div>
-        <div><div class="planet-fact-label">Moons</div><div class="planet-fact-val">${p.moons}</div></div>
-        <div><div class="planet-fact-label">Avg Temp</div><div class="planet-fact-val">${p.temp}</div></div>
-      </div>
-      <p style="font-size:0.61rem;line-height:1.8;color:var(--silver);margin-top:10px;">${p.desc}</p>
-      <p class="planet-blender-note">⬡ Blender: ${p.note}</p>
-    </div>`;
-  const rd=card.querySelector('.planet-render');
-  rd.addEventListener('dragover',e=>{e.preventDefault();rd.style.outline='2px solid var(--electric)';});
-  rd.addEventListener('dragleave',()=>rd.style.outline='');
-  rd.addEventListener('drop',e=>{
-    e.preventDefault(); rd.style.outline='';
-    const f=e.dataTransfer.files[0];
-    if(f&&f.type.startsWith('image/')){
-      const r=new FileReader();
-      r.onload=ev=>{
-        const img=card.querySelector('img');
-        card.querySelector('.planet-render-placeholder').style.display='none';
-        img.src=ev.target.result; img.classList.add('loaded');
-      };
-      r.readAsDataURL(f);
-    }
+/* ── BUILD WEEK GRID ── */
+(function(){
+  const g=document.getElementById('wkGrid');
+  WEEKS.forEach((w,i)=>{
+    const d=document.createElement('div');
+    d.className='wg-item';
+    d.onclick=()=>goPage('week',i+1);
+    d.innerHTML=`<div class="wg-box" id="wb${i+1}">W${String(i+1).padStart(2,'0')}</div><div class="wg-lbl">${w.s}</div>`;
+    g.appendChild(d);
   });
-  grid.appendChild(card);
-});
+})();
 
-/* ═══ WEEK PAGES ════════════════════════════ */
-const rotoPages=document.getElementById('roto-pages');
-WEEKS.forEach((w,i)=>{
-  const n=i+1;
-  const pct=Math.round((n/12)*100);
-  const secs=n*5; const timePct=(secs/60)*100;
-  const m=Math.floor(secs/60), s=secs%60;
-  const timeStr=`${m}:${String(s).padStart(2,'0')}`;
-  let miniGrid=''; for(let k=1;k<=12;k++) miniGrid+=`<button class="week-grid-btn${k===n?' cur':k<n?' done':''}" onclick="goPage('roto-${k}')">${k}</button>`;
-  let segs=''; for(let k=1;k<=12;k++) segs+=`<div class="tl-seg${k<n?' done':k===n?' cur':''}" onclick="goPage('roto-${k}')"><span class="tl-seg-lbl">W${k}</span></div>`;
+/* ── LOAD WEEK ── */
+function loadWeek(n){
+  curWeek=n;
+  const w=WEEKS[n-1];
 
-  const div=document.createElement('div');
-  div.className='page page-roto'; div.id=`page-roto-${n}`;
-  div.innerHTML=`
-    <div class="roto-header">
-      <div>
-        <div class="page-eyebrow">Rotoscoping Progress</div>
-        <div class="roto-week-badge">WEEK <span>${String(n).padStart(2,'0')}</span></div>
-      </div>
-      <div class="roto-nav-area">
-        <div class="roto-nav-btns">
-          <button class="roto-nav-btn" onclick="goPage('roto-${n-1}')" ${n===1?'disabled':''}>← Prev</button>
-          <button class="roto-nav-btn" onclick="goPage('roto-${n+1}')" ${n===12?'disabled':''}>Next →</button>
-          <button class="roto-nav-btn" onclick="goPage('home')" style="margin-left:6px">↩ Home</button>
-        </div>
-      </div>
-    </div>
+  document.getElementById('wkLabel').textContent=`Week ${String(n).padStart(2,'0')} — ${w.time}`;
+  // Split title for accent on last word
+  const words=w.t.split(' ');
+  const last=words.pop();
+  document.getElementById('wkTitle').innerHTML=`${words.join(' ')} <span class="acc">${last}</span>`;
 
-    <div class="roto-layout">
-      <div class="roto-main">
-        <div class="roto-week-title">${w.title}</div>
+  // Progress strip
+  for(let i=1;i<=12;i++){
+    const seg=document.getElementById('ps'+i);
+    seg.className='prog-seg'+(i<n?' done':i===n?' cur':'');
+  }
+  // Week grid boxes
+  for(let i=1;i<=12;i++){
+    const b=document.getElementById('wb'+i);
+    b.className='wg-box'+(i<n?' done':i===n?' cur':'');
+  }
 
-        <div class="yt-wrap">
-          <div class="yt-container">
-            <iframe id="ytf-${n}" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
-            <div class="yt-placeholder" id="ytp-${n}">
-              <div class="yt-play-icon">▶</div>
-              <div class="yt-placeholder-text">Paste your YouTube URL below<br>to embed your Week ${n} progress video</div>
-            </div>
-          </div>
-          <div class="yt-input-row">
-            <input class="yt-input" id="yti-${n}" type="text" placeholder="https://youtu.be/... or https://www.youtube.com/watch?v=..." />
-            <button class="yt-btn" onclick="loadYT(${n})">Embed Video</button>
-          </div>
-        </div>
+  // Detail cards
+  document.getElementById('wkCards').innerHTML=`
+    <div class="wcard"><h4>Overview</h4><p>${w.d}</p></div>
+    <div class="wcard"><h4>Animation Segment</h4><p><strong style="color:var(--white)">${w.focus}</strong> — covering ${w.time} of the final 60-second film.</p></div>
+    <div class="wcard"><h4>Techniques Used</h4><div class="week-tags">${w.tags.map(t=>`<span class="wtag">${t}</span>`).join('')}</div></div>`;
 
-        <p class="roto-desc">${w.desc}</p>
-        <div class="roto-tags">${w.tags.map(t=>`<span class="roto-tag">${t}</span>`).join('')}</div>
-      </div>
+  // Video
+  const area=document.getElementById('vidArea');
+  if(vidURLs[n]){
+    area.innerHTML=`<iframe src="${vidURLs[n]}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe>`;
+  }else{
+    area.innerHTML=`<div class="vid-ph"><div class="play-ring">▶</div><p>PASTE A YOUTUBE LINK BELOW<br>TO EMBED YOUR WEEK ${n} VIDEO</p></div>`;
+  }
+  document.getElementById('ytInput').value='';
 
-      <div class="roto-sidebar">
-        <div class="sidebar-card">
-          <div class="sc-label">Course Progress</div>
-          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-          <div class="progress-meta"><span>Week ${n} of 12</span><span class="pct">${pct}%</span></div>
-          <div style="margin-top:14px;">
-            <div class="progress-bar"><div class="progress-fill red" style="width:${timePct}%"></div></div>
-            <div class="progress-meta"><span>Duration banked</span><span class="pct amber">${timeStr} / 1:00</span></div>
-          </div>
-        </div>
-
-        <div class="sidebar-card">
-          <div class="sc-label">Jump to Week</div>
-          <div class="week-grid">${miniGrid}</div>
-        </div>
-
-        <div class="timeline-card">
-          <div class="tl-label">60-Second Timeline</div>
-          <div class="tl-track">${segs}</div>
-          <div class="tl-time">Banked: <span>${secs}s</span> &nbsp;·&nbsp; Remaining: <span>${60-secs}s</span></div>
-        </div>
-      </div>
-    </div>`;
-  rotoPages.appendChild(div);
-});
-
-/* ═══ YOUTUBE LOADER ════════════════════════ */
-function extractYTId(raw){
-  raw=raw.trim();
-  let m;
-  if((m=raw.match(/[?&]v=([^&#]+)/))) return m[1];
-  if((m=raw.match(/youtu\.be\/([^?&#]+)/))) return m[1];
-  if((m=raw.match(/youtube\.com\/embed\/([^?&#]+)/))) return m[1];
-  if(/^[a-zA-Z0-9_-]{11}$/.test(raw)) return raw;
-  return null;
-}
-function loadYT(n){
-  const inp=document.getElementById(`yti-${n}`);
-  const id=extractYTId(inp.value);
-  if(!id){ inp.style.borderColor='var(--rust)'; setTimeout(()=>inp.style.borderColor='',1600); return; }
-  const frame=document.getElementById(`ytf-${n}`);
-  const ph=document.getElementById(`ytp-${n}`);
-  frame.src=`https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1`;
-  frame.classList.add('active');
-  ph.style.display='none';
+  document.getElementById('prevBtn').disabled=n===1;
+  document.getElementById('nextBtn').disabled=n===12;
 }
 
-/* ═══ ROUTER ════════════════════════════════ */
-const NAV_MAP={home:'nav-home',about:'nav-about',solar:'nav-solar'};
-for(let i=1;i<=12;i++) NAV_MAP[`roto-${i}`]='nav-roto';
-
-function goPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const target=document.getElementById(`page-${id}`);
-  if(target) target.classList.add('active');
-  document.querySelectorAll('.nav-links > li > a').forEach(a=>a.classList.remove('active'));
-  const nid=NAV_MAP[id];
-  if(nid) document.getElementById(nid).classList.add('active');
-  window.scrollTo({top:0,behavior:'instant'});
+function shiftWeek(d){
+  const nxt=curWeek+d;
+  if(nxt>=1&&nxt<=12)loadWeek(nxt);
 }
+
+/* ── EMBED VIDEO ── */
+function doEmbed(){
+  const raw=document.getElementById('ytInput').value.trim();
+  if(!raw)return;
+  let vid='';
+  try{
+    const url=new URL(raw);
+    vid=url.hostname.includes('youtu.be')?url.pathname.slice(1):url.searchParams.get('v')||'';
+  }catch(e){
+    const m=raw.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_\-]{11})/);
+    if(m)vid=m[1];
+  }
+  if(!vid){alert('Could not parse YouTube URL.\nUse youtube.com/watch?v= or youtu.be/ format.');return;}
+  const src=`https://www.youtube.com/embed/${vid}`;
+  vidURLs[curWeek]=src;
+  document.getElementById('vidArea').innerHTML=`<iframe src="${src}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe>`;
+  document.getElementById('ytInput').value='';
+}
+
+document.getElementById('ytInput').addEventListener('keydown',e=>{if(e.key==='Enter')doEmbed();});
 </script>
 </body>
 </html>
